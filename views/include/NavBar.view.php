@@ -15,7 +15,7 @@
                 <li><a href="/signup">Créer un compte</a></li>
             <?php } else if ($_SESSION['connected']) { ?>
                 <li>
-                    <a href="/profile">Mon compte</a>
+                    <a href="/myprofile">Mon compte</a>
                     <?php if (isset($_SESSION['manager'])) { ?>
                     <ul>
                         <li><a href="/manage/assos">Associations</a></li>

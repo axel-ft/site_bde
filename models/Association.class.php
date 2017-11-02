@@ -14,26 +14,26 @@ class Association {
 
     public function __construct()
     {
-        $DB = DataBaseAccess::getInstance();
+        $this->DB = DataBaseAccess::getInstance();
     }
 
     /**
      * Creates a new association
      *
      */
-    public function NewAssociation()
+    public function NewAssociation(string $AssoName, string $Acronym = null, string $AssoDescription, string $Logo, string $Email = null, string $Phone = null, string $FacebookLink = null, string $TwitterLink = null, int $ProfileID)
     {
-        $Association = $DB->prepare('INSERT INTO associations(name_asso, acronym, description_asso, logo, email, phone, facebook_link, twitter_link, id_contact)
-                                 VALUES (:name_asso, :acronym, :description_asso, :logo, :email, :phone, :facebook_link, :twitter_link, :id_contact');
-        $Association->bindParam(':name_asso',           $_POST['name_asso'],            PDO::PARAM_STR);
-        $Association->bindParam(':acronym',             $_POST['acronym'],              PDO::PARAM_STR);
-        $Association->bindParam(':description_asso',    $_POST['description_asso'],     PDO::PARAM_STR);
-        $Association->bindParam(':logo',                $_POST['logo'],                 PDO::PARAM_STR);
-        $Association->bindParam(':email',               $_POST['email'],                PDO::PARAM_STR);
-        $Association->bindParam(':phone',               $_POST['phone'],                PDO::PARAM_STR);
-        $Association->bindParam(':facebook_link',       $_POST['facebook_link'],        PDO::PARAM_STR);
-        $Association->bindParam(':twitter_link',        $_POST['twitter_link'],         PDO::PARAM_STR);
-        $Association->bindParam(':id_contact',          intval($_POST['id_contact']),   PDO::PARAM_INT);
+        $Association = $this->DB->prepare('INSERT INTO associations(name_asso, acronym, description_asso, logo, email, phone, facebook_link, twitter_link, id_profile)
+                                           VALUES (:name_asso, :acronym, :description_asso, :logo, :email, :phone, :facebook_link, :twitter_link, :id_profile)');
+        $Association->bindParam(':name_asso',           $AssoName,        \PDO::PARAM_STR);
+        $Association->bindParam(':acronym',             $Acronym,         \PDO::PARAM_STR);
+        $Association->bindParam(':description_asso',    $AssoDescription, \PDO::PARAM_STR);
+        $Association->bindParam(':logo',                $Logo,            \PDO::PARAM_STR);
+        $Association->bindParam(':email',               $Email,           \PDO::PARAM_STR);
+        $Association->bindParam(':phone',               $Phone,           \PDO::PARAM_STR);
+        $Association->bindParam(':facebook_link',       $FacebookLink,    \PDO::PARAM_STR);
+        $Association->bindParam(':twitter_link',        $TwitterLink,     \PDO::PARAM_STR);
+        $Association->bindParam(':id_profile',          $ProfileID,       \PDO::PARAM_INT);
         $Association->execute();
     }
 
@@ -41,19 +41,19 @@ class Association {
      * Updates a existing association
      *
      */
-    public function UpdateAssociation($ID)
+    public function UpdateAssociation(int $IdAsso, string $NameAsso, string $Acronym = null, string $DescriptionAsso, string $Logo, int $ProfileID, string $Email = null, string $Phone = null, string $FacebookLink = null, string $TwitterLink = null)
     {
-        $UpdateAsso = $DB->prepare('UPDATE associations SET name_asso = :name_asso, acronym = :acronym, description_asso = :descritption_asso, logo = :logo, email = :email, phone = :phone, facebook_link = :facebook_link, twitter_link = :twitter_link, id_contact = :id_contact WHERE id_asso = :id_asso');
-        $UpdateAsso->bindParam(':id_asso',             intval($ID),                    PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':name_asso',           $_POST['name_asso'],            PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':acronym',             $_POST['acronym'],              PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':description_asso',    $_POST['description_asso'],     PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':logo',                $_POST['logo'],                 PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':email',               $_POST['email'],                PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':phone',               $_POST['phone'],                PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':facebook_link',       $_POST['facebook_link'],        PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':twitter_link',        $_POST['twitter_link'],         PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':id_contact',          intval($_POST['id_contact']),   PDO::PARAM_INT);
+        $UpdateAsso = $this->DB->prepare('UPDATE associations SET name_asso = :name_asso, acronym = :acronym, description_asso = :description_asso, logo = :logo, email = :email, phone = :phone, facebook_link = :facebook_link, twitter_link = :twitter_link, id_profile = :id_profile WHERE id_asso = :id_asso');
+        $UpdateAsso->bindParam(':id_asso',             $IdAsso,          \PDO::PARAM_INT);
+        $UpdateAsso->bindParam(':name_asso',           $NameAsso,        \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':acronym',             $Acronym,         \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':description_asso',    $DescriptionAsso, \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':logo',                $Logo,            \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':email',               $Email,           \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':phone',               $Phone,           \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':facebook_link',       $FacebookLink,    \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':twitter_link',        $TwitterLink,     \PDO::PARAM_STR);
+        $UpdateAsso->bindParam(':id_profile',          $ProfileID,       \PDO::PARAM_INT);
         $UpdateAsso->execute();
     }
 
@@ -64,27 +64,27 @@ class Association {
      *
      * @return Array[mixed]
      */
-    public function GetAssociation($ID = null) {
+    public function GetAssociation(int $ID = null) {
         if ($ID !== null) {
-            $GetAsso = $DB->prepare('SELECT * FROM associations WHERE id_asso = :id_asso');
-            $GetAsso->bindParam(':id_asso', intval($ID), PDO::PARAM_INT);
+            $GetAsso = $this->DB->prepare('SELECT * FROM associations WHERE id_asso = :id_asso');
+            $GetAsso->bindParam(':id_asso', $ID, \PDO::PARAM_INT);
             $GetAsso->execute();
             $Asso = $GetAsso->fetchAll();
-            return (count($Asso) > 0) ? $Asso : null;
+            return (count($Asso) > 0) ? $Asso[0] : null;
         } else {
-            $GetAssos = $DB->prepare('SELECT * FROM associations');
+            $GetAssos = $this->DB->prepare('SELECT * FROM associations');
             $GetAssos->execute();
             $Assos = $GetAssos->fetchAll();
             return (count($Assos) > 0) ? $Assos : null;;
         }
     }
 
-    public function DeleteAssociation($ID)
+    public function DeleteAssociation(int $ID)
     {
-        if ($ID !== null)
+        if (!is_null($ID))
         {
-            $DelAsso = $DB->prepare('DELETE FROM associations WHERE id_asso = :id_asso');
-            $DelAsso->bindParam('id_asso', intval($ID), PDO::PARAM_INT);
+            $DelAsso = $this->DB->prepare('DELETE FROM associations WHERE id_asso = :id_asso');
+            $DelAsso->bindParam('id_asso', $ID, \PDO::PARAM_INT);
             $DelAsso->execute();
         }
     }

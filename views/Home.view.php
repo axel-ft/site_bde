@@ -9,6 +9,7 @@
 <body>
     <?php require_once('views/include/NavBar.view.php'); ?>
 
+    <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
 
     <?php require_once('views/include/Scripts.view.php'); ?>
 </body>

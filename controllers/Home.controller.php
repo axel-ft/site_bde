@@ -1,5 +1,16 @@
 <?php namespace Controller;
 
-require_once('views/Home.view.php');
+class Home
+{
+    public function __construct()
+    {
+
+    }
+
+    public static function RequireView(string $Message = null)
+    {
+        return require_once('views/Home.view.php');
+    }
+}
 
 ?>

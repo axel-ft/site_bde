@@ -12,11 +12,13 @@ $router = new Router($_GET['url']);
 $router->get('/', function ()
 {
     require_once 'controllers/Home.controller.php';
+    \Controller\Home::RequireView();
 });
 
 $router->get('/home', function ()
 {
     require_once 'controllers/Home.controller.php';
+    \Controller\Home::RequireView();
 });
 
 $router->get('/assos', function ()
@@ -41,8 +43,17 @@ $router->get('/contact', function ()
 
 $router->get('/login', function ()
 {
-    require_once('controllers/LogIn.controller.php');
-    \Controller\LogIn::RequireView();
+    try
+    {
+        require_once('controllers/LogIn.controller.php');
+        \Controller\LogIn::RequireView();
+    }
+
+    catch (Exception $e)
+    {
+        require_once('controllers/Home.controller.php');
+        \Controller\Home::RequireView($e->getMessage());
+    }
 });
 
 $router->post('/login', function ()
@@ -74,7 +85,7 @@ $router->get('/logout', function ()
     //require_once "controllers/LogOut.controller.php";
 });
 
-$router->get('/profile', function()
+$router->get('/myprofile', function()
 {
     require_once "controllers/Profile.controller.php";
     try
@@ -86,11 +97,12 @@ $router->get('/profile', function()
     catch (Exception $e)
     {
         require_once "controllers/LogIn.controller.php";
+        http_response_code(403);
         \Controller\LogIn::RequireView($e->getMessage());
     }
 });
 
-$router->post('/profile', function()
+$router->post('/myprofile', function()
 {
     require_once "controllers/Profile.controller.php";
     try
@@ -105,6 +117,7 @@ $router->post('/profile', function()
     catch (Exception $e)
     {
         require_once "controllers/LogIn.controller.php";
+        http_response_code(403);
         \Controller\LogIn::RequireView($e->getMessage());
     }
 });
@@ -112,7 +125,7 @@ $router->post('/profile', function()
 $router->post('/deactivate', function()
 {
     require_once "controllers/Profile.controller.php";
-    //require_once "controllers/Home.controller.php";
+    require_once "controllers/Home.controller.php";
     try
     {
         $Profile = new \Controller\Profile();
@@ -120,13 +133,269 @@ $router->post('/deactivate', function()
             require_once "controllers/Home.controller.php";
         else
             $Profile->RequireView();
-        //\Controller\Home::RequireView($Profile->GetMessage);
+        \Controller\Home::RequireView($Profile->GetMessage());
     }
 
     catch (Exception $e)
     {
         require_once "controllers/LogIn.controller.php";
+        http_response_code(403);
         \Controller\LogIn::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/assos', function()
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->RequireView("List");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/assos/add', function()
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->RequireView("Add");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/assos/add', function()
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->AddAsso();
+        $ManageAssos->RequireView("List", $ManageAssos->GetMessage());
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/assos/edit/:id', function($id)
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->RequireView("Edit", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/assos/edit/:id', function($id)
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->UpdateAsso($id);
+        $ManageAssos->RequireView("Edit", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/assos/delete/:id', function($id)
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->RequireView("Delete", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/assos/delete/:id', function($id)
+{
+    require_once "controllers/manage/ManageAssos.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageAssos = new \Controller\ManageAssos();
+        $ManageAssos->DeleteAsso($id);
+        $ManageAssos->RequireView("List", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/profiles', function()
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $ManageProfiles = new \Controller\ManageProfiles();
+        $ManageProfiles->RequireView("List");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/profiles/add', function()
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $ManageProfiles = new \Controller\ManageProfiles();
+        $ManageProfiles->RequireView("Add");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/profiles/add', function()
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $ManageProfiles = new \Controller\ManageProfiles();
+        $ManageProfiles->AddProfile();
+        $ManageProfiles->RequireView("List");
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/profiles/edit/:id', function($id)
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageProfiles = new \Controller\ManageProfiles();
+        $ManageProfiles->RequireView("Edit", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/profiles/edit/:id', function($id)
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageProfiles = new \Controller\ManageProfiles();
+        $ManageProfiles->UpdateProfile($id);
+        $ManageProfiles->RequireView("Edit", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/profiles/delete/:id', function($id)
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageProfiles = new \Controller\ManageProfiles();
+        if ($ManageProfiles->DeleteProfile($id, true))
+            $ManageProfiles->RequireView("Delete", null, $id);
+        else
+            $ManageProfiles->RequireView("Hide", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/profiles/delete/:id', function($id)
+{
+    require_once "controllers/manage/ManageProfiles.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageProfiles = new \Controller\ManageProfiles();
+        $ManageProfiles->DeleteProfile($id);
+        $ManageProfiles->RequireView("List", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
     }
 });
 
@@ -138,5 +407,6 @@ try
 catch (RouterException $e)
 {
     require_once "controllers/404.controller.php";
+    http_response_code(404);
     \Controller\NotFound::RequireView();
 }

@@ -1,11 +1,11 @@
 <?php namespace Controller;
 
+require_once('controllers/Common.controller.php');
 require_once('models/User.class.php');
 
-class SignUp
+class SignUp extends CommonController
 {
     private $UserManagement;
-    private $Message;
 
     private $Username,
             $Password,
@@ -20,27 +20,17 @@ class SignUp
     {
         $this->UserManagement = new \Model\UserManagement();
 
-        if ((isset($_POST['username']) && !empty($_POST['username']))
-                && (isset($_POST['password']) && !empty($_POST['password']))
-                && (isset($_POST['password_confirm']) && !empty($_POST['password_confirm']))
-                && (isset($_POST['first_name']) && !empty($_POST['first_name']))
-                && (isset($_POST['last_name']) && !empty($_POST['last_name']))
-                && (isset($_POST['email']) && !empty($_POST['email'])))
+        if (self::AreFieldsPresent("username", "password", "password_confirm", "first_name", "last_name", "email"))
         {
-            $this->Username = trim($_POST['username']);
-            $this->Password = $_POST['password'];
-            $this->PasswordConfirm = $_POST['password_confirm'];
-            $this->FirstName = trim($_POST['first_name']);
-            $this->LastName = trim($_POST['last_name']);
-            $this->Email = trim($_POST['email']);
-            $this->Avatar = (isset($_POST['avatar']) && !empty($_POST['avatar'])) ? $_POST['avatar'] : null;
-            $this->FacebookLink = (isset($_POST['facebook_link']) && !empty($_POST['facebook_link'])) ? $_POST['facebook_link'] : null;
+            $this->Username = self::ValidateStringField("username");
+            $this->Password = self::ValidateStringField("password");
+            $this->PasswordConfirm = self::ValidateStringField("password_confirm");
+            $this->FirstName = self::ValidateStringField("first_name");
+            $this->LastName = self::ValidateStringField("last_name");
+            $this->Email = self::ValidateStringField("email");
+            $this->Avatar = self::ValidateStringField("avatar");
+            $this->FacebookLink = self::ValidateStringField("facebook_link");
         }
-    }
-
-    public function GetMessage()
-    {
-        return (isset($this->Message) & !empty($this->Message)) ? $this->Message : null;
     }
 
     private function IsSignUpFormComplete()
@@ -60,7 +50,7 @@ class SignUp
 
     public function CreateAccount()
     {
-        if ($this->IsSignUpFormComplete())
+        if ($this->IsSignUpFormComplete() && !$this->UserManagement->IsMailPresent($this->Email))
         {
             if ($this->PasswordsMatch($this->Password, $this->PasswordConfirm))
             {
@@ -70,15 +60,14 @@ class SignUp
             }
 
             else
-            {
                 $this->Message = "Les deux mots de passe ne correspondent pas";
-            }
         }
 
+        else if ($this->IsSignUpFormComplete() && $this->UserManagement->IsMailPresent($this->Email))
+            $this->Message = "Il existe déjà un compte avec cette adresse mail";
+
         else
-        {
             $this->Message = "Remplissez les champs obligatoires";
-        }
     }
 
     public static function RequireView(string $Message = null)
