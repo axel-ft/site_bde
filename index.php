@@ -7,6 +7,8 @@ require_once('router/Router.class.php');
 require_once('router/Route.class.php');
 require_once('router/RouterException.class.php');
 
+use \Router\Router as Router;
+
 $router = new Router($_GET['url']);
 
 $router->get('/', function ()
@@ -398,6 +400,147 @@ $router->post('/manage/profiles/delete/:id', function($id)
         \Controller\Home::RequireView($e->getMessage());
     }
 });
+
+
+
+
+
+
+
+$router->get('/manage/users', function()
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $ManageUsers = new \Controller\ManageUsers();
+        $ManageUsers->RequireView("List");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/users/add', function()
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $ManageUsers = new \Controller\ManageUsers();
+        $ManageUsers->RequireView("Add");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/users/add', function()
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $ManageUsers = new \Controller\ManageUsers();
+        $ManageUsers->AddUser();
+        $ManageUsers->RequireView("List");
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/users/edit/:id', function($id)
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageUsers = new \Controller\ManageUsers();
+        $ManageUsers->RequireView("Edit", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/users/edit/:id', function($id)
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageUsers = new \Controller\ManageUsers();
+        $ManageUsers->UpdateUser($id);
+        $ManageUsers->RequireView("Edit", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->get('/manage/users/delete/:id', function($id)
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageUsers = new \Controller\ManageUsers();
+        $ManageUsers->RequireView("Delete", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+$router->post('/manage/users/delete/:id', function($id)
+{
+    require_once "controllers/manage/ManageUsers.controller.php";
+    try
+    {
+        $id = intval($id);
+        $ManageProfiles = new \Controller\ManageUsers();
+        $ManageProfiles->DeleteUser($id);
+        $ManageProfiles->RequireView("List", null, $id);
+    }
+
+    catch (Exception $e)
+    {
+        require_once"controllers/Home.controller.php";
+        http_response_code(403);
+        \Controller\Home::RequireView($e->getMessage());
+    }
+});
+
+
+
+
+
+
+
+
+
 
 try
 {

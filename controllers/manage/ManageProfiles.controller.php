@@ -47,6 +47,12 @@ class ManageProfiles extends CommonController
 
     public function AddProfile()
     {
+        if ($this->IsProfileFormComplete() && $this->UserManagement->IsMailPresent($this->Email))
+            $this->Message = "Il existe déjà un compte avec cette adresse mail";
+
+        else
+            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
+
         if ($this->IsProfileFormComplete() && !$this->UserManagement->IsMailPresent($this->Email))
         {
             $this->UserManagement->NewProfile($this->FirstName,
@@ -61,12 +67,6 @@ class ManageProfiles extends CommonController
                                               $this->Phone);
             $this->Message = "Profil ajouté correctement";
         }
-
-        if ($this->IsProfileFormComplete() && $this->UserManagement->IsMailPresent($this->Email))
-            $this->Message = "Il existe déjà un compte avec cette adresse mail";
-
-        else
-            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
     }
 
     private function IsProfileDataCorrectlyRetrieved()

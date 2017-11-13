@@ -1,4 +1,4 @@
-<?php
+<?php namespace Router;
 
 class Router {
     private $url;

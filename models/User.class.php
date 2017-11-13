@@ -57,20 +57,23 @@ class UserManagement {
      * Creates a new user account in the database
      *
      */
-    public function NewUserAccount(string $Username, string $Password, string $Email)
+    public function NewUserAccount(string $Username, string $Password, string $Email = null, int $ProfileId = null)
     {
+        if (is_null($Email) && is_null($ProfileId))
+            throw new \Exception("Il faut renseigner un mail ou un ID");
+
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
               $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"]; 
 
         $Password = crypt($Password, '$2a$07$302838711915bef2db65cc$');
-        $ContactId = $this->GetIdOfProfile($Email);
+        if (is_null($ProfileId)) $ProfileId = $this->GetIdOfProfile($Email);
         $SignUp = $this->DB->prepare('INSERT INTO users(username, password, validation_hash, signup_date, last_ip, last_connection, id_profile)
                                 VALUES (:username, :password, :validation_hash, NOW(), :last_ip, NOW(), :id_profile)');
         $SignUp->bindParam(':username',        $Username,                     \PDO::PARAM_STR);
         $SignUp->bindParam(':password',        $Password,                     \PDO::PARAM_STR);
         $SignUp->bindParam(':validation_hash', $Password,                     \PDO::PARAM_STR);
         $SignUp->bindParam(':last_ip',         $_SERVER['REMOTE_ADDR'],       \PDO::PARAM_STR);
-        $SignUp->bindParam(':id_profile',      $ContactId,                    \PDO::PARAM_INT);
+        $SignUp->bindParam(':id_profile',      $ProfileId,                    \PDO::PARAM_INT);
         $SignUp->execute();
     }
 
@@ -144,8 +147,7 @@ class UserManagement {
     public function GetUser(int $ID = null) {
         if ($ID !== null) {
             $GetUser = $this->DB->prepare('SELECT * FROM users WHERE id_user = :id_user');
-            $IntID = intval($ID);
-            $GetUser->bindParam(':id_user', $IntID, \PDO::PARAM_INT);
+            $GetUser->bindParam(':id_user', $ID, \PDO::PARAM_INT);
             $GetUser->execute();
             $User = $GetUser->fetchAll();
             return (count($User) > 0) ? $User[0] : null;
@@ -155,6 +157,15 @@ class UserManagement {
             $Users = $GetUsers->fetchAll();
             return (count($Users) > 0) ? $Users : null;;
         }
+    }
+
+    public function GetUserId(string $UserName)
+    {
+        $GetId = $this->DB->prepare('SELECT id_user FROM users WHERE username = :username');
+        $GetId->bindParam(':username', $UserName, \PDO::PARAM_STR);
+        $GetId->execute();
+        $Id = $GetId->fetchAll();
+        return (count($Id) > 0) ? intval($Id[0]['id_user']) : null;
     }
 
     /**
@@ -185,16 +196,25 @@ class UserManagement {
      * Deactivates a given user account
      *
      */
-    public function DeactivateAccount(int $ID) {
+    public function DeactivateAccount(int $ID)
+    {
         $Deactivate = $this->DB->prepare('UPDATE users SET active = 0 WHERE id_user = :id_user');
         $Deactivate->bindParam(':id_user', $ID, \PDO::PARAM_INT);
         $Deactivate->execute();
     }
 
-    public function DeactivateAccountFromProfile(int $ID) {
+    public function DeactivateAccountFromProfile(int $ID)
+    {
         $Deactivate = $this->DB->prepare('UPDATE users SET active = 0 WHERE id_profile = :id_profile');
         $Deactivate->bindParam(':id_profile', $ID, \PDO::PARAM_INT);
         $Deactivate->execute();
+    }
+
+    public function ActivateAccount(int $ID)
+    {
+        $Activate = $this->DB->prepare('UPDATE users SET active = 1 WHERE id_user = :id_user');
+        $Activate->bindParam(':id_user', $ID, \PDO::PARAM_INT);
+        $Activate->execute();
     }
 
     /**
