@@ -28,7 +28,7 @@ class SignUp extends CommonController
             $this->FirstName = self::ValidateStringField("first_name");
             $this->LastName = self::ValidateStringField("last_name");
             $this->Email = self::ValidateStringField("email");
-            $this->Avatar = self::ValidateStringField("avatar");
+            $this->Avatar = self::ValidateUploadedImage("avatar", "avatars");
             $this->FacebookLink = self::ValidateStringField("facebook_link");
         }
     }

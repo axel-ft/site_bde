@@ -10,14 +10,14 @@
     <?php require_once('views/include/NavBar.view.php'); ?>
 
     <section>
-        <form method="POST" action="/manage/profiles/delete/<?php if (!is_null($ProfileID) && !empty($ProfileID)) echo htmlentities($ProfileID) ?>">
+        <form method="POST" action="/manage/users/deactivate/<?php if (!is_null($UserID) && !empty($UserID)) echo htmlentities($UserID) ?>">
             <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
             <div>
-                Voulez-vous vraiment supprimer ce profil ?
+                Voulez-vous vraiment désactiver ce compte ?
             </div>
 
-            <button type="submit">Supprimer le profil de <?php if (!is_null($Profile) && !empty($Profile)) echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name']) ?></button>
-            <a href="/manage/assos">Revenir à la liste des profils</a>
+            <button type="submit">Désactiver le compte de <?php if (!is_null($User) && !empty($User)) echo htmlentities($User['username']) ?></button>
+            <a href="/manage/users">Revenir à la liste des comptes</a>
         </form>
     </section>
 

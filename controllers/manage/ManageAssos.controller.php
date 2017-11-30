@@ -27,12 +27,12 @@ class ManageAssos extends CommonController
 
     private function IsAssoFormComplete()
     {
-        if ($IsAssoFormComplete = (self::AreFieldsPresent("name_asso", "description_asso", "logo", "profile")))
+        if ($IsAssoFormComplete = (self::AreFieldsPresent("name_asso", "description_asso", "profile") && self::IsFilePresent("logo")))
         {
             $this->NameAsso = self::ValidateStringField("name_asso");
             $this->Acronym = self::ValidateStringField("acronym");
             $this->AssoDescription = self::ValidateStringField("description_asso");
-            $this->Logo = self::ValidateStringField("logo");
+            $this->Logo = self::ValidateUploadedImage("logo", "logos");
             $this->Email = self::ValidateStringField("email");
             $this->Phone = self::ValidateStringField("phone");
             $this->FacebookLink = self::ValidateStringField("facebook_link");

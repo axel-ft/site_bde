@@ -11,12 +11,12 @@
 
     <section>
         <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
-        <a href="/manage/users/add">Ajouter un utilisateur</a>
+        <a class="button" href="/manage/users/add">Ajouter un utilisateur</a>
         <?php
             if (!is_null($Users))
             {
                 echo "<table>";
-                echo "<tr><th>Nom d'utilisateur</th><th>Dernière visite</th><th>Inscrit depuis</th><th>Activé</th><th>Validé</th><th>Rôle</th><th>Profil lié</th><th>Actions</th></tr>";
+                echo "<thead><tr><th>Nom d'utilisateur</th><th>Dernière visite</th><th>Inscrit depuis</th><th>Activé</th><th>Validé</th><th>Rôle</th><th>Profil lié</th><th>Actions</th></tr></thead>";
 
                 foreach ($Users as $User)
                 {
@@ -34,7 +34,7 @@
                                           if ($User['id_profile'] === $Profile['id_profile'])
                                               echo "<a href='/manage/profiles/edit/".$Profile['id_profile']."' target='_blank'>".$Profile['first_name']." ".$Profile['last_name']."</a>"
                             ?></td>
-                        <td><a href="/manage/users/edit/<?= htmlentities($User['id_user']) ?>">Modifier</a> <a href="/manage/users/deactivate/<?= htmlentities($User['']) ?>">Supprimer</a></td>
+                        <td class="actions"><a class="button" href="/manage/users/edit/<?= htmlentities($User['id_user']) ?>">Modifier</a> <a class="button" href="/manage/users/deactivate/<?= htmlentities($User['id_user']) ?>">Désactiver</a></td>
                     </tr>
                 <?php
                 }
@@ -44,7 +44,7 @@
 
             else
             {
-                echo "Aucune association pour le moment";
+                echo "Aucun compte pour le moment";
             }
         ?>
     </section>

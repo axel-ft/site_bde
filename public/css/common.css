@@ -1,0 +1,736 @@
+/* Keyframes declaration */
+@keyframes SlideLabelUp
+{
+    from
+    {
+        top: 5px;
+    }
+
+    to
+    {
+        top:-14px;
+    }
+}
+
+@keyframes SlideTLabelUp
+{
+    from
+    {
+        top: 8px;
+    }
+
+    to
+    {
+        top:-7px;
+    }
+}
+
+@keyframes SlideLabelDown
+{
+    from
+    {
+        top: -14px;
+    }
+
+    to
+    {
+        top: 5px;
+    }
+}
+
+@keyframes SlideTLabelDown
+{
+    from
+    {
+        top: -7px;
+    }
+
+    to
+    {
+        top: 8px;
+    }
+}
+
+/* Some basic rules */
+*
+{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+body
+{
+    background: #333;
+    color: #DDD;
+}
+
+section
+{
+    width: 100%;
+}
+
+h1
+{
+    font-size: 2.75rem;
+    margin: 2.5rem 0 2rem 0;
+    color: #DDD;
+}
+
+h2
+{
+    font-size: 2.25rem;
+    margin: 2rem 0 1.5rem 0;
+    color: #DDD;
+}
+
+h3
+{
+    font-size: 1.75rem;
+    margin: 1.5rem 0 1rem 0;
+    color: #DDD;
+}
+
+h4
+{
+    font-size: 1.5rem;
+    margin: 1.25rem 0 0.75rem 0;
+    color: #DDD;
+}
+
+h5
+{
+    font-size: 1.25rem;
+    margin: 1rem 0 0.5rem 0;
+    color: #DDD;
+}
+
+h6
+{
+    font-size: 1.12rem;
+    margin: 0.75rem 0 0.25rem 0;
+    color: #DDD;
+}
+
+a
+{
+    font-size: 1rem;
+    color: #3F51B5;
+    text-decoration: none;
+}
+
+p
+{
+    font-size: 1rem;
+    margin: 1rem 0 1rem 0;
+    color: #DDD;
+}
+
+.darkcolor
+{
+    color: #212121;
+}
+/* Button rules */
+a.button, button.button
+{
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #DDD;
+    background: #3F51B5;
+    border-radius: 2px;
+    min-width: 88px;
+    height: 36px;
+    transition: all 0.25s ease;
+    padding: 10px 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+a.button:hover, button.button:hover
+{
+    background: #37479F;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 2px 4px 0;
+}
+
+a.button:active, button.button:active
+{
+    background: #303F9F;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 6px 0;
+}
+
+/* Navbar Rules */
+nav
+{
+    background-color: rgba(34, 34, 34, 0.6);
+    overflow: hidden;
+    font-weight: bold;
+}
+
+nav *
+{
+    z-index: 2;
+}
+
+nav > ul
+{
+    float: left;
+}
+
+nav ul li
+{
+    display: inline-block;
+    list-style-type: none;
+}
+
+nav > ul > li > a
+{
+    display: block;
+    color: #DDD;
+    padding: 0.5rem 1rem;
+    line-height: 2rem;
+    text-decoration: none;
+}
+
+nav li > ul
+{
+    display: none;
+    background-color: #222;
+}
+
+nav li > ul li
+{
+    display: block;
+}
+
+nav li > ul li a
+{
+    color: #DDD;
+    display:block;
+    line-height: 2rem;
+    padding: 0.5rem 2rem;
+    text-decoration: none;
+}
+
+nav li > ul > li ul
+{
+    display: none;
+    background-color: #777;
+}
+
+nav li:hover
+{
+    background-color: #444;
+}
+
+nav li:hover > ul
+{
+    position: absolute;
+    display:block;
+}
+
+nav li > ul > li:hover > ul
+{
+    position: absolute;
+    display:block;
+    margin-left:100%;
+    margin-top: -3em;
+}
+
+nav > form
+{
+    float: right;
+    height: 3rem;
+    display: flex;
+    padding: 0.5rem;
+    background: none;
+    width: 15vw;
+}
+
+nav ::-webkit-input-placeholder
+{ /* WebKit, Blink, Edge */
+    color:    #CCC;
+    font-style: italic;
+}
+
+nav :-moz-placeholder
+{ /* Mozilla Firefox 4 to 18 */
+    color:    #CCC;
+    opacity:  1;
+    font-style: italic;
+}
+
+nav ::-moz-placeholder
+{ /* Mozilla Firefox 19+ */
+    color:    #CCC;
+    opacity:  1;
+    font-style: italic;
+}
+
+nav :-ms-input-placeholder
+{ /* Internet Explorer 10-11 */
+    color:    #CCC;
+    font-style: italic;
+}
+
+nav ::-ms-input-placeholder
+{ /* Microsoft Edge */
+    color:    #CCC;
+    font-style: italic;
+}
+
+/* Tables rules */
+table
+{
+    border-collapse: collapse;
+    width: 95vw;
+    margin: 10px auto;
+    table-layout: fixed;
+    background: #999;
+    border: 4px solid #444;
+}
+
+table thead th
+{
+    font-weight: bold;
+    background: #222;
+    color: #DDD;
+    border-bottom: 3px solid #444;
+    line-height: 1.5;
+}
+
+tr
+{
+    background: #555;
+    border-bottom: 2px solid #777;
+    margin-bottom: 5px;
+}
+
+tr:nth-child(even)
+{
+    background: #333;
+}
+
+th, td
+{
+    border-right: 1px solid rgba(102, 102, 102, 0.5);
+    text-align: left;
+    padding: 10px 15px;
+    font-weight: 300;
+}
+
+tr:nth-child(even) td
+{
+    border-right: 1px solid rgba(136, 136, 136, 0.5);
+}
+
+th:last-child, td:last-child, tr:nth-child(even) td:last-child
+{
+    border-right: none;
+}
+
+/* Form rules */
+form
+{
+    font-size: 24px;
+    background: #EEEEEE;
+    width: 60vw;
+    margin: auto;
+    text-align: center;
+    border-radius: 2px;
+}
+
+form > div.field, form > fieldset > div.field
+{
+    margin: 10px auto 25px auto;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+form > div:first-child, form > fieldset > div:first-child
+{
+    min-height: 62px;
+}
+
+form > div:first-child > *, form > fieldset > div:first-child > *
+{
+    margin-top: 20px;
+}
+
+form > div:last-child > *, form > fieldset > div:last-child > *
+{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+input, textarea
+{
+    color: #212121;
+    background: none;
+    width: 35vw;
+    min-width: 200px;
+    outline:none;
+}
+
+input
+{
+    border: none;
+    border-bottom: 1px solid #949494;
+    padding: 16px 0 8px 0;
+    transition: border-bottom-color 0.25s ease;
+}
+
+textarea
+{
+    border-radius: 4px;
+    padding: 26px 13px 8px 13px;
+    min-height: 100px;
+    resize: vertical;
+    transition: border-color 0.25s ease
+}
+
+div.field > input, div.field > textarea
+{
+    order: 3;
+}
+
+input:hover, input:hover:placeholder-shown, input:hover:invalid:placeholder-shown
+{
+    border-bottom: 2px solid #212121;
+}
+
+input:focus, input:focus:hover, input:focus:placeholder-shown, input:focus:invalid:placeholder-shown, input:focus:invalid
+{
+    border-bottom: 2px solid #304FFE;
+}
+
+input:invalid:placeholder-shown
+{
+    border-bottom: 1px solid #212121;
+}
+
+input:invalid
+{
+    border-bottom: 2px solid #FF1744;
+}
+
+input:focus ~ label.text, input:valid ~ label.text
+{
+    font-size: 12px;
+    top: -14px;
+    animation: SlideLabelUp 0.25s ease;
+}
+
+input:focus ~ label.text, textarea:focus ~ label.text
+{
+    color: rgba(48, 79, 254, 0.87) !important;
+}
+
+input:not(focus):valid ~ label.text, textarea:not(focus):valid ~ label.text
+{
+    color: #757575;
+    font-size: 12px;
+}
+
+input:focus:not(placeholder-shown):invalid ~ label.text,
+textarea:focus:not(placeholder-shown):invalid ~ label.text
+{
+    color: #FF1744;
+}
+
+input:not(focus):invalid ~ label.text
+{
+    top: -14px;
+    color: #FF1744;
+    animation: none;
+    font-size: 12px;
+}
+
+input:not(focus):placeholder-shown ~ label.text
+{
+    top: 5px;
+    color: #757575;
+    animation: SlideLabelDown 0.25s ease;
+    font-size: 1rem;
+}
+
+input:focus:placeholder-shown ~ label.text
+{
+    font-size: 12px;
+    top: -14px;
+    color: rgba(48, 79, 254, 0.87) !important;
+    animation: SlideLabelUp 0.25s ease;
+}
+
+textarea:hover, textarea:hover:placeholder-shown, textarea:hover:invalid:placeholder-shown
+{
+    border: 2px solid #212121;
+}
+
+textarea:focus, textarea:focus:hover, textarea:focus:placeholder-shown, textarea:focus:invalid:placeholder-shown, textarea:focus:invalid
+{
+    border: 2px solid #304FFE;
+}
+
+textarea:invalid:placeholder-shown
+{
+    border: 1px solid #212121;
+}
+
+textarea:invalid
+{
+    border: 2px solid #FF1744;
+}
+
+textarea:focus ~ label.text, textarea:valid ~ label.text
+{
+    font-size: 12px;
+    padding-left: 15px;
+    top: -7px;
+    animation: SlideTLabelUp 0.25s ease;
+}
+
+textarea:not(focus):invalid ~ label.text
+{
+    top: -7px;
+    padding-left: 15px;
+    color: #FF1744;
+    animation: none;
+    font-size: 12px;
+}
+
+textarea:not(focus):placeholder-shown ~ label.text
+{
+    top: 8px;
+    color: #757575;
+    animation: SlideTLabelDown 0.25s ease;
+    font-size: 1rem;
+}
+
+textarea:focus:placeholder-shown ~ label.text
+{
+    font-size: 12px;
+    top: -7px;
+    color: rgba(48, 79, 254, 0.87) !important;
+    animation: SlideTLabelUp 0.25s ease;
+}
+
+label
+{
+    color: #757575;
+    border: none;
+    padding: 16px 0 8px 0;
+}
+
+div.field > label.icon
+{
+    order: 1;
+}
+
+label.icon
+{
+    margin: 0 16px;
+    width: 24px;
+}
+
+label.icon i
+{
+    position: relative;
+    top: 6px;
+}
+
+div.field > label.text
+{
+    order: 2;
+}
+
+label.text
+{
+    position: absolute;
+    left: calc(30vw - 17.5vw + 28px);
+    cursor: text;
+    animation: SlideLabelDown 0.25s ease;
+}
+
+/* Modal rules */
+div.modal
+{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 250ms ease;
+    pointer-events: none;
+    color: #212121;
+}
+
+div.modal:target
+{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+div.modal > div
+{
+    width: 75vw;
+    position: relative;
+    border-radius: 2px;
+    background: #EEEEEE;
+    margin: auto;
+}
+
+div.modal > div > a.close_modal
+{
+    display: block;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #212121;
+    border: 2px solid #EEEEEE;
+    z-index: 101;
+    color: #EEEEEE;
+    position: absolute;
+    font-size: 2rem;
+    right: -1.25rem;
+    top: -1.25rem;
+}
+
+div.modal > div > div.modal_header
+{
+    overflow: hidden;
+    height: 33vh;
+    min-height: 310px;
+    width: 75vw;
+}
+
+div.modal > div > div.modal_header > div
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 33vh;
+    min-height: 300px;
+    border-radius: 2px 2px 0 0;
+    overflow: hidden;
+    box-shadow: #000000 0 -2px 10px 2px;
+}
+
+div.modal > div > div.modal_header > div > img.team
+{
+    width: 100%;
+}
+
+div.modal > div > div.modal_header > div > div.modal_name
+{
+    position: absolute;
+    background: rgba(0, 0, 0, 0.75);
+    bottom: 0;
+    width: 100%;
+}
+
+div.modal > div > div.modal_image
+{
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 150px;
+    left: 50px;
+    background: #EEEEEE;
+    box-shadow: #000000 0 0 15px -5px;
+    padding: 10px;
+}
+
+div.modal > div > div.modal_image > div
+{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    overflow: hidden;
+}
+
+div.modal > div > div.modal_image > div > img
+{
+    width: 100%;
+    height: auto;
+}
+
+div.modal > div > div.modal_body
+{
+    min-height: 300px;
+    padding: 20px 20px 20px 400px;
+}
+
+div.modal > div > div.modal_body *
+{
+    color: #212121;
+    text-align: justify;
+}
+
+/* Sections rules */
+section#login, section#signup
+{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100vh - 3rem);
+}
+
+section.light
+{
+    color: #212121;
+}
+
+section#associations
+{
+    display:flex;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+section > h2
+{
+    text-align: center;
+    width:100%;
+}
+
+section#associations > article
+{
+    margin: 20px;
+    text-align: center;
+}
+
+/* Article rules */
+section#associations > article.asso > a.logo_asso
+{
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    overflow: hidden;
+}
+
+section#associations > article.asso > a.logo_asso > img
+{
+    width: 300px;
+    height: auto;
+}

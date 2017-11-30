@@ -1,4 +1,4 @@
-<header id="home">
+<header>
     <nav id="navbar_light">
 
         <a href="index.php" title="Accueil"><div id="logo_menu"></div></a>
@@ -14,7 +14,7 @@
                 <li><a href="/login">Connexion</a></li>
                 <li><a href="/signup">Créer un compte</a></li>
             <?php } else if ($_SESSION['connected']) { ?>
-                <li>
+            <li <?php if (isset($_SESSION['manager'])) echo "class='submenu'" ?>>
                     <a href="/myprofile">Mon compte</a>
                     <?php if (isset($_SESSION['manager'])) { ?>
                     <ul>
@@ -30,10 +30,9 @@
 
         </ul>
 
-        <form id="recherche_form" method="get" action="">
-            <input type="hidden" name="p" value="recherche">
-            <input type="search" name="query" placeholder="Rechercher" value="<?php if(!empty($_GET['query'])) echo $_GET['query']; ?>">
-            <button type="submit"><i class="material-icons">search</i></button>
+        <form id="search_form" method="GET" action="#">
+            <input type="search" name="query" placeholder="Rechercher..." value="<?php if(!empty($_GET['query'])) echo $_GET['query']; ?>">
+            <button class="button" type="submit"><i class="material-icons">search</i></button>
         </form>
 
     </nav>

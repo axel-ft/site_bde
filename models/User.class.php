@@ -63,7 +63,7 @@ class UserManagement {
             throw new \Exception("Il faut renseigner un mail ou un ID");
 
         if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]))
-              $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"]; 
+              $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
 
         $Password = crypt($Password, '$2a$07$302838711915bef2db65cc$');
         if (is_null($ProfileId)) $ProfileId = $this->GetIdOfProfile($Email);
@@ -259,6 +259,14 @@ class UserManagement {
         $UpdatePassword->bindParam(':password', $NewPassword,   \PDO::PARAM_STR);
         $UpdatePassword->bindParam(':id_user',  $ID,            \PDO::PARAM_INT);
         $UpdatePassword->execute();
+    }
+
+    public function UpdateRole(int $ID, int $Role)
+    {
+        $NewRole = $this->DB->prepare('UPDATE users SET admin = :new_role WHERE id_user = :id_user');
+        $NewRole->bindParam(':new_role', $Role, \PDO::PARAM_INT);
+        $NewRole->bindParam(':id_user', $ID, \PDO::PARAM_INT);
+        $NewRole->execute();
     }
 
     public function IsProfileLinkedToAccount(int $ProfileID)

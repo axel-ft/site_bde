@@ -35,14 +35,15 @@ class ManageUsers extends CommonController
         $this->AssoQueries = new \Model\Association();
     }
 
-    private function IsUserFormComplete()
+    private function IsCreateUserFormComplete()
     {
-        if ($IsProfileFormComplete = (self::AreFieldsPresent("username", "password", "password_confirm", "first_name", "last_name", "email") || self::AreFieldsPresent("username", "password", "password_confirm", "profile")))
+        if ($IsCreateUserFormComplete = (self::AreFieldsPresent("username", "password", "password_confirm", "first_name", "last_name", "email") || self::AreFieldsPresent("username", "password", "password_confirm", "profile")))
         {
             $this->UserName = self::ValidateStringField("username");
             $this->Password = self::ValidateStringField("password");
             $this->PasswordConfirm = self::ValidateStringField("password_confirm");
             $this->Admin = self::ValidateIntField("role");
+            if (!is_null($this->Admin) && ($this->Admin > 2 || $this->Admin < 0)) $this->Admin = null;
             $this->Active = self::ValidateStringField("active");
             $this->ProfileID = self::ValidateIntField("profile");
             $this->FirstName = self::ValidateStringField("first_name");
@@ -57,7 +58,22 @@ class ManageUsers extends CommonController
             $this->Phone = self::ValidateStringField("phone");
         }
 
-        return $IsProfileFormComplete;
+        return $IsCreateUserFormComplete;
+    }
+
+    private function IsUpdateUserFormComplete()
+    {
+        if ($IsUpdateUserFormComplete = (self::AreFieldsPresent("username", "role")))
+        {
+            $this->UserName = self::ValidateStringField("username");
+            $this->Password = self::ValidateStringField("password");
+            $this->PasswordConfirm = self::ValidateStringField("password_confirm");
+            $this->Admin = self::ValidateIntField("role");
+            if (!is_null($this->Admin) && ($this->Admin > 2 || $this->Admin < 0)) $this->Admin = null;
+            $this->Active = self::ValidateStringField("active");
+        }
+
+        return $IsUpdateUserFormComplete;
     }
 
     private function PasswordsMatch(string $Password, string $PasswordConfirm)
@@ -69,19 +85,19 @@ class ManageUsers extends CommonController
     {
         $BasicChecksPass;
 
-        if ($BasicChecksPass = ($this->IsUserFormComplete() && $this->UserManagement->IsUsernamePresent($this->UserName) && !is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email)))
+        if ($BasicChecksPass = (($this->IsProfileDataCorrectlyRetrieved() || $this->IsAccountDataCorrectlyRetrieved()) && $this->UserManagement->IsUsernamePresent($this->UserName) && !is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email)))
         {
             $this->Message = "Il existe déjà un compte avec cette adresse mail et ce  nom d'utilisateur";
             return $BasicChecksPass;
         }
 
-        else if ($BasicChecksPass = ($this->IsUserFormComplete() && $this->UserManagement->IsUsernamePresent($this->UserName)))
+        else if ($BasicChecksPass = (($this->IsProfileDataCorrectlyRetrieved() || $this->IsAccountDataCorrectlyRetrieved()) && $this->UserManagement->IsUsernamePresent($this->UserName)))
         {
             $this->Message = "Il existe déjà un compte avec ce nom d'utilisateur";
             return $BasicChecksPass;
         }
 
-        else if ($BasicChecksPass = ($this->IsUserFormComplete() && !is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email)))
+        else if ($BasicChecksPass = (($this->IsProfileDataCorrectlyRetrieved() || $this->IsAccountDataCorrectlyRetrieved()) && !is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email)))
         {
             $this->Message = "Il existe déjà un compte avec cette adresse mail";
             return $BasicChecksPass;
@@ -95,17 +111,17 @@ class ManageUsers extends CommonController
         if ($this->UsernameAndMailCheck())
             return;
 
-         if ($this->IsUserFormComplete()
+         if ($this->IsCreateUserFormComplete()
             && !$this->UserManagement->IsUsernamePresent($this->UserName)
             && (is_null($this->Email) || (!is_null($this->Email && !$this->UserManagement->IsMailPresent($this->Email)))))
-        {
+         {
             if (!$this->PasswordsMatch($this->Password, $this->PasswordConfirm))
             {
                 $this->Message = "Les deux mots de passe ne correspondent pas";
                 return;
             }
 
-            if (is_null($this->ProfileID) && $this->IsProfileDataCorrectlyRetrieved())
+            if (is_null($this->ProfileID) && $this->IsProfileDataCorrectlyRetrieved() && $this->IsUserDataCorrectlyRetrieved())
             {
                 $this->UserManagement->NewProfile($this->FirstName,
                                                   $this->LastName,
@@ -129,6 +145,7 @@ class ManageUsers extends CommonController
                 return;
             }
 
+            $this->UserManagement->UpdateRole($this->UserManagement->GetUserId($this->UserName), $this->Admin);
             $this->UpdateActiveState();
             $this->Message = "Utilisateur/Profil ajouté(s) correctement";
         }
@@ -139,7 +156,7 @@ class ManageUsers extends CommonController
 
     private function UpdateActiveState()
     {
-        if (!is_null($this->Active) && $this->Active === 1)
+        if (!is_null($this->Active) && $this->Active === "yes")
             $this->UserManagement->ActivateAccount($this->UserManagement->GetUserId($this->UserName));
         else if (is_null($this->Active))
             $this->UserManagement->DeactivateAccount($this->UserManagement->GetUserId($this->UserName));
@@ -152,54 +169,54 @@ class ManageUsers extends CommonController
                 && (!is_null($this->Email) && !empty($this->Email)));
     }
 
+    private function IsAccountDataCorrectlyRetrieved()
+    {
+        return ((!is_null($this->UserName) && !empty($this->UserName))
+                && (!is_null($this->Admin) && (!empty($this->Admin) || $this->Admin === 0))
+                && (is_null($this->Active) || $this->Active === "yes"));
+    }
+
     public function UpdateUser(int $ID)
-    {///ICICICICICICICICICICICICICICICICICICICICI
+    {
         if ($this->UsernameAndMailCheck())
             return;
 
-        if ($this->IsUserFormComplete() && $this->IsProfileDataCorrectlyRetrieved())
-
+        if ($this->IsUpdateUserFormComplete() && $this->IsAccountDataCorrectlyRetrieved())
         {
-            $this->UserManagement->UpdateProfile($ID,
-                                                 $this->FirstName,
-                                                 $this->LastName,
-                                                 $this->Email,
-                                                 $this->Avatar,
-                                                 $this->ProfileDescription,
-                                                 $this->AssoID,
-                                                 $this->Position,
-                                                 $this->FacebookLink, 
-                                                 $this->TwitterLink,
-                                                 $this->Phone);
-            $this->Message = "L'association a correctement été mise à jour";
+            if ((!is_null($this->Password) && !empty($this->Password))
+                && (!is_null($this->PasswordConfirm) && !empty($this->PasswordConfirm))
+                && $this->PasswordsMatch($this->Password, $this->PasswordConfirm))
+                $this->UserManagement->UpdatePassword($ID, $this->Password);
+            
+            else if ((self::IsFieldPresent("password") || self::IsFieldPresent("password_confirm")) && (is_null($this->Password) || is_null($this->PasswordConfirm)))
+            {
+                $this->Message = "Il faut confirmer le mot de passe";
+                return;
+            }
+
+            else if ((!is_null($this->Password) && !empty($this->Password))
+                    && (!is_null($this->PasswordConfirm) && !empty($this->PasswordConfirm))
+                    && !$this->PasswordsMatch($this->Password, $this->PasswordConfirm))
+            {
+                $this->Message = "Les deux mots de passe ne correspondent pas";
+                return;
+            }
+            
+            $this->UserManagement->UpdateUsername($ID, $this->UserName);
+            $this->UserManagement->UpdateRole($ID, $this->Admin);
+            $this->UpdateActiveState();
+
+            $this->Message = "Le compte a correctement été mise à jour";
         }
 
         else
             $this->Message = "Il manque un/des champ(s) obligatoire(s)";
     }
 
-    public function DeleteProfile(int $ID, bool $DryRun = false)
+    public function DeactivateUser(int $ID)
     {
-        if ($this->UserManagement->IsProfileLinkedToAccount($ID))
-        {
-            if (!$DryRun)
-            {
-                $this->UserManagement->HideProfile($ID);
-                $this->UserManagement->DeactivateAccountFromProfile($ID);
-                $this->Message = "Le profil a correctement été masqué, et l'utilisateur correspondant désactivé";
-            }
-            return false;
-        }
-
-        else
-        {
-            if (!$DryRun)
-            {
-                $this->UserManagement->DeleteProfile($ID);
-                $this->Message = "Le profil a correctement été supprimé";
-            }
-            return true;
-        }
+        $this->UserManagement->DeactivateAccount($ID);
+        $this->Message = "Le compte a bien été désactivé";
     }
 
     public function RequireView(string $CRUD, string $Message = null, $UserID = null)
