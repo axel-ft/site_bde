@@ -69,12 +69,12 @@ class DataBaseAccess
 
     public function __clone()
     {
-        throw new Exception("Cannot clone a singleton");
+        throw new \Exception("Cannot clone a singleton");
     }
 
     public function __wakeup()
     {
-        throw new Exception("Cannot wake up a singleton");
+        throw new \Exception("Cannot wake up a singleton");
     }
 }
 

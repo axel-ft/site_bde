@@ -38,7 +38,12 @@ class Profile extends CommonController {
 
         else
         {
-            $this->Message = "Vous n'êtes pas connecté. Veuillez vous identifier";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous n\'êtes pas connecté. Veuillez vous identifier
+                              </div>';
             throw new \Exception($this->Message);
         }
     }
@@ -91,7 +96,12 @@ class Profile extends CommonController {
         if (!is_null($this->Password) && !empty($this->Password) &&
             !is_null($this->PasswordConfirm) && !empty($this->PasswordConfirm) &&
             $this->Password !== $this->PasswordConfirm)
-                $this->Message = "Les deux mots de passe ne correspondent pas";
+                $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Les deux mots de passe ne correspondent pas
+                                  </div>';
 
         return $IsPasswordPresent;
 
@@ -105,14 +115,24 @@ class Profile extends CommonController {
         {
             $this->UserManagement->UpdateProfile(intval($this->ConnectedProfile['id_profile']), $this->FirstName, $this->LastName, $this->Email, $this->Avatar, $this->DescriptionProfile, $this->IDAsso, $this->Position, $this->FacebookLink, $this->TwitterLink, $this->Phone);
             $this->UserManagement->UpdateUsername($this->ConnectedAccount['id_user'], $this->Username);
-            $this->Message = "Votre compte a correctement été mis à jour";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>Votre compte a correctement été mis à jour
+                              </div>';
             if ($this->PasswordUpdateAndMatch())
                 $this->UserManagement->UpdatePassword($this->ConnectedAccount['id_user'], $this->Password);
         }
 
         else
         {
-            $this->Message = "Remplissez les champs obligatoires";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Remplissez les champs obligatoires
+                              </div>';
         }
     }
 
@@ -126,13 +146,23 @@ class Profile extends CommonController {
         {
             $this->UserManagement->DeactivateAccount($ID);
             session_destroy();
-            $this->Message = "Compte correctement désactivé";
+            $this->Message = '<div class="alert alert-info alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-info"></i></strong>Compte correctement désactivé
+                              </div>';
             return true;
         }
 
         else
         {
-            $this->Message = "Le mot de passe entré est vide ou incorrect";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Le mot de passe entré est vide ou incorrect
+                              </div>';
         }
 
         return false;

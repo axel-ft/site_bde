@@ -9,57 +9,130 @@
 <body>
     <?php require_once('views/include/NavBar.view.php'); ?>
 
-    <section id="signup" class="light">
-        <form method="POST" action="/signup" enctype="multipart/form-data">
-            <h2>Inscription</h2>
-            <p>Déjà un compte ? <a href="/login" title="Connexion">Connectez-vous</a></p>
+    <div class="ms-hero-page-override ms-hero-img-city ms-hero-bg-dark-light">
+        <div class="container">
+            <div class="text-center">
+                <span class="ms-logo ms-logo-lg ms-logo-white center-block mb-2 mt-2 animated zoomInDown animation-delay-5">Y</span>
+                <h1 class="no-m ms-site-title color-white center-block ms-site-title-lg mt-2 animated zoomInDown animation-delay-5">Inter-<span>Assos</span></h1>
+                <p class="lead lead-lg color-white text-center center-block mt-2 mw-800 text-uppercase fw-300 animated fadeInUp animation-delay-7">Inscrivez-vous !</p>
+            </div>
+        </div>
+    </div>
 
-            <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
-            <div class="field">
-                <label class="icon" for="username"><i class="material-icons">person</i></label>
-                <input type="text" name="username" id="username" placeholder=" " required>
-                <label class="text" for="username">Nom d'utilisateur *</i></label>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-12">
+                <div class="card card-hero card-primary animated fadeInUp animation-delay-7">
+                    <div class="card-block">
+                        <h1 class="color-primary text-center">Inscription</h1>
+                        <?php if ($Message !== null) echo $Message ?>
+                        <form method="POST" action="/signup" enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-account"></i>
+                                                </span>
+                                                <label class="control-label" for="username">Nom d'utilisateur <small>*</small></label>
+                                                <input type="text" id="username" name="username" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-email"></i>
+                                                </span>
+                                                <label class="control-label" for="email">E-mail <small>*</small></label>
+                                                <input type="email" id="email" name="email" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-lock"></i>
+                                                </span>
+                                                <label class="control-label" for="password">Mot de passe <small>*</small></label>
+                                                <input type="password" id="password" name="password" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-lock"></i>
+                                                </span>
+                                                <label class="control-label" for="password_confirm">Mot de passe (confirmation) <small>*</small></label>
+                                                <input type="password" id="password_confirm" name="password_confirm" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-account"></i>
+                                                </span>
+                                                <label class="control-label" for="first_name">Prénom <small>*</small></label>
+                                                <input type="text" id="first_name" name="first_name" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-account"></i>
+                                                </span>
+                                                <label class="control-label" for="last_name">Nom <small>*</small></label>
+                                                <input type="text" id="last_name" name="last_name" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-upload"></i>
+                                                </span>
+                                                <input type="text" readonly="true" class="form-control" placeholder="Photo de profil - Parcourir...">
+                                                <input type="file" id="avatar" name="avatar" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-facebook"></i>
+                                                </span>
+                                                <label class="control-label" for="facebook_link">Lien Facebook</label>
+                                                <input type="url" id="facebook_link" name="facebook_link" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <fieldset>
+                            <button type="submit" class="btn btn-raised btn-primary btn-block">Créer un compte <i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i></button>
+                        </form>
+                        <p class="text-center">Déjà un compte ? <a href="/login" title="Connexion">Connectez-vous</a></p>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-                <label class="icon" for="password"><i class="material-icons">lock</i></label>
-                <input type="password" name="password" id="password" placeholder=" " required>
-                <label class="text" for="password">Mot de passe *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="password_confirm"><i class="material-icons">lock</i></label>
-                <input type="password" name="password_confirm" id="password_confirm" placeholder=" " required>
-                <label class="text" for="password_confirm">Mot de passe (confirmation) *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="first_name"><i class="material-icons">contacts</i></label>
-                <input type="text" name="first_name" id="first_name" placeholder=" " required>
-                <label class="text" for="first_name">Prénom *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="last_name"><i class="material-icons">contacts</i></label>
-                <input type="text" name="last_name" id="last_name" placeholder=" " required>
-                <label class="text" for="last_name">Nom *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="email"><i class="material-icons">email</i></label>
-                <input type="email" name="email" id="email" placeholder=" " required>
-                <label class="text" for="email">E-mail *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="avatar"><i class="material-icons">face</i></label>
-                <input type="file" name="avatar" id="avatar" placeholder=" ">
-                <label class="text" for="avatar">Avatar</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="facebook_link"><i class="material-icons">share</i></label>
-                <input type="url" name="facebook_link" id="facebook_link" placeholder=" ">
-                <label class="text" for="facebook_link">Lien Facebook</label>
-            </div>
-            <div class="field">
-                <button class="button" type="submit">Créer un compte</button>
-            </div>
-        </form>
-    </section>
+        </div>
+    </div>
 
     <?php require_once('views/include/Scripts.view.php'); ?>
 </body>

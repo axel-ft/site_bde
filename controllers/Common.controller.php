@@ -74,7 +74,7 @@ class CommonController
 
     protected static function ValidateUploadedImage(string $PostFileInput, string $PathInImagesFolder = "")
     {
-        if (!empty($_FILES[$PostFileInput]) && $_FILES[$PostFileInput]['error'] !== 4)
+        if (self::IsFilePresent($PostFileInput) && $_FILES[$PostFileInput]['error'] !== 4)
         {
             $Extension = strrchr($_FILES[$PostFileInput]['name'], '.');
             $ImageFileName = md5_file($_FILES[$PostFileInput]['tmp_name']) . $Extension;
@@ -87,15 +87,30 @@ class CommonController
             $AuthorizedMIMEs = array("image/png", "image/gif", "image/jpeg", "images/bmp");
 
             if (!in_array($Extension, $AuthorizedExtensions) && !in_array($MIME, $AuthorizedMIMEs))
-                throw new \Exception("Vous devez uploader un fichier de type PNG, JPG, JPEG, GIF ou BMP");
+                throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                            <i class="zmdi zmdi-close"></i>
+                                        </button>
+                                        <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous devez uploader un fichier de type PNG, JPG, JPEG, GIF ou BMP
+                                      </div>');
 
             if ($Size > $MaxSize)
-                throw new \Exception("Le fichier est trop grand (max. 10Mo)");
+                throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                            <i class="zmdi zmdi-close"></i>
+                                        </button>
+                                        <strong><i class="zmdi zmdi-close-circle"></i></strong>Le fichier est trop grand (max. 10 Mo)
+                                      </div>');
 
             if (move_uploaded_file($_FILES[$PostFileInput]['tmp_name'], './public/images/' . $PathInImagesFolder . "/" . $ImageFileName))
                 return '/public/images/' . $PathInImagesFolder . "/" . $ImageFileName;
             else
-                throw new \Exception("Il y a eu un problème lors de l'enregistrement du fichier");
+                throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                            <i class="zmdi zmdi-close"></i>
+                                        </button>
+                                        <strong><i class="zmdi zmdi-close-circle"></i></strong>Il y a eu un problème lors de l\'enregistrement du fichier
+                                      </div>');
         }
 
         else

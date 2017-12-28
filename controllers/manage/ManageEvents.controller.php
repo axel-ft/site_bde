@@ -13,13 +13,19 @@ class ManageEvents extends CommonController
             $BeginDate,
             $EndDate,
             $EventDescription,
+            $Poster,
             $FacebookEventLink,
             $IdAsso;
 
     public function __construct()
     {
         if (self::IsManager())
-           throw new \Exception("Vous n'avez pas les droits suffisants pour accéder à cette page"); 
+           throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous n\'avez pas les droits suffisants pour accéder à cette page
+                                 </div>');
 
         $this->EventsQueries = new \Model\Event();
         $this->AssociationsQueries = new \Model\Association();
@@ -27,12 +33,13 @@ class ManageEvents extends CommonController
 
     private function IsEventFormComplete()
     {
-        if ($IsEventFormComplete = (self::AreFieldsPresent("name_event", "begin_date", "end_date", "description_event", "facebook_event_link", "asso")))
+        if ($IsEventFormComplete = (self::AreFieldsPresent("name_event", "begin_date", "end_date", "description_event", "facebook_event_link", "asso") && self::IsFilePresent("poster")))
         {
             $this->EventName = self::ValidateStringField("name_event");
             $this->BeginDate = self::ValidateDateField("begin_date");
             $this->EndDate = self::ValidateDateField("end_date");
             $this->EventDescription = self::ValidateStringField("description_event");
+            $this->Poster = self::ValidateUploadedImage("poster", "posters");
             $this->FacebookEventLink = self::ValidateStringField("facebook_event_link");
             $this->IdAsso = self::ValidateIntField("asso");
         }
@@ -48,13 +55,24 @@ class ManageEvents extends CommonController
                                            $this->BeginDate,
                                            $this->EndDate,
                                            $this->EventDescription,
+                                           $this->Poster,
                                            $this->FacebookEventLink,
                                            $this->IdAsso);
-            $this->Message = "Evénement ajouté correctement";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>L\'événement a correctement été ajouté
+                              </div>';
         }
 
         else
-            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     private function IsEventDataCorrectlyRetrieved()
@@ -76,19 +94,35 @@ class ManageEvents extends CommonController
                                               $this->BeginDate,
                                               $this->EndDate,
                                               $this->EventDescription,
+                                              $this->Poster,
                                               $this->FacebookEventLink,
                                               $this->IdAsso);
-            $this->Message = "L'événement a correctement été mise à jour";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>L\'événement a correctement été mis à jour
+                              </div>';
         }
 
         else
-            $this->Message = "Remplissez les champs obligatoires";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     public function DeleteEvent(int $ID)
     {
         $this->EventsQueries->DeleteEvent($ID);
-        $this->Message = "L'événement a correctement été supprimé";
+        $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                <i class="zmdi zmdi-close"></i>
+                            </button>
+                            <strong><i class="zmdi zmdi-check"></i></strong>L\'événement a correctement été supprimé
+                          </div>';
     }
 
     public function RequireView(string $CRUD, string $Message = null, $IdEvent = null)
@@ -102,7 +136,7 @@ class ManageEvents extends CommonController
         {
             $Event = $this->EventsQueries->GetEvent($IdEvent);
             if (!is_null($Event) || !empty($Event))
-            { 
+            {
                 $Event['begin_date'] = new \DateTime($Event['begin_date']);
                 $Event['end_date'] = new \DateTime($Event['end_date']);
             }
@@ -120,14 +154,26 @@ class ManageEvents extends CommonController
                 break;
 
             case "Edit":
-                if (!isset($Event) || is_null($Event)) throw new \Exception("Mauvais paramètre : cet événement n'existe pas");
+                if (!isset($Event) || is_null($Event))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : cet événement n\'existe pas
+                                          </div>');
                 return require_once('views/manage/events/EditEvent.view.php');
                 break;
 
             case "Delete":
-                if (!isset($Event) || is_null($Event)) throw new \Exception("Mauvais paramètre : cet événement n'existe pas");
+                if (!isset($Event) || is_null($Event))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : cet événement n\'existe pas
+                                          </div>');
                 return require_once('views/manage/events/DeleteEvent.view.php');
-                break; 
+                break;
         }
     }
 }

@@ -213,6 +213,7 @@ nav li > ul li a
     line-height: 2rem;
     padding: 0.5rem 2rem;
     text-decoration: none;
+    text-transform: uppercase;
 }
 
 nav li > ul > li ul

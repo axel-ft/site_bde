@@ -24,6 +24,8 @@ $router->get('/assos', function ()
 $router->get('/events', function ()
 {
     require_once "controllers/Events.controller.php";
+    $EventsPage = new \Controller\Events();
+    $EventsPage->RequireView();
 });
 
 $router->get('/bde', function ()
@@ -34,6 +36,8 @@ $router->get('/bde', function ()
 $router->get('/contact', function ()
 {
     require_once "controllers/Contact.controller.php";
+    $ContactPage = new \Controller\Contact();
+    $ContactPage->RequireView();
 });
 
 $router->get('/login', function ()
@@ -62,8 +66,17 @@ $router->post('/login', function ()
 
 $router->get('/signup', function ()
 {
-    require_once "controllers/SignUp.controller.php";
-    \Controller\SignUp::RequireView();
+    try {
+        require_once "controllers/SignUp.controller.php";
+        \Controller\SignUp::RequireView();
+    }
+
+    catch (\Exception $e)
+    {
+        require_once('controllers/Home.controller.php');
+        $Home = new \Controller\Home();
+        $Home->RequireView($e->getMessage());
+    }
 });
 
 $router->post('/signup', function ()

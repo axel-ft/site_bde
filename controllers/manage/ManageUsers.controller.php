@@ -29,7 +29,12 @@ class ManageUsers extends CommonController
     public function __construct()
     {
         if (self::IsManager())
-           throw new \Exception("Vous n'avez pas les droits suffisants pour accéder à cette page"); 
+           throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous n\'avez pas les droits suffisants pour accéder à cette page
+                                 </div>');
 
         $this->UserManagement = new \Model\UserManagement();
         $this->AssoQueries = new \Model\Association();
@@ -87,19 +92,34 @@ class ManageUsers extends CommonController
 
         if ($BasicChecksPass = (($this->IsProfileDataCorrectlyRetrieved() || $this->IsAccountDataCorrectlyRetrieved()) && $this->UserManagement->IsUsernamePresent($this->UserName) && !is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email)))
         {
-            $this->Message = "Il existe déjà un compte avec cette adresse mail et ce  nom d'utilisateur";
+            $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Il existe déjà un compte avec cette adresse mail et ce nom d\'utilisateur
+                              </div>';
             return $BasicChecksPass;
         }
 
         else if ($BasicChecksPass = (($this->IsProfileDataCorrectlyRetrieved() || $this->IsAccountDataCorrectlyRetrieved()) && $this->UserManagement->IsUsernamePresent($this->UserName)))
         {
-            $this->Message = "Il existe déjà un compte avec ce nom d'utilisateur";
+            $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Il existe déjà un compte avec ce nom d\'utilisateur
+                              </div>';
             return $BasicChecksPass;
         }
 
         else if ($BasicChecksPass = (($this->IsProfileDataCorrectlyRetrieved() || $this->IsAccountDataCorrectlyRetrieved()) && !is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email)))
         {
-            $this->Message = "Il existe déjà un compte avec cette adresse mail";
+            $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Il existe déjà un compte avec cette adresse mail
+                              </div>';
             return $BasicChecksPass;
         }
 
@@ -117,11 +137,16 @@ class ManageUsers extends CommonController
          {
             if (!$this->PasswordsMatch($this->Password, $this->PasswordConfirm))
             {
-                $this->Message = "Les deux mots de passe ne correspondent pas";
+                $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Les deux mots de passe ne correspondent pas
+                                  </div>';
                 return;
             }
 
-            if (is_null($this->ProfileID) && $this->IsProfileDataCorrectlyRetrieved() && $this->IsUserDataCorrectlyRetrieved())
+            if (is_null($this->ProfileID) && $this->IsProfileDataCorrectlyRetrieved() && $this->IsAccountDataCorrectlyRetrieved())
             {
                 $this->UserManagement->NewProfile($this->FirstName,
                                                   $this->LastName,
@@ -141,17 +166,32 @@ class ManageUsers extends CommonController
 
             else
             {
-                $this->Message = "Quelque chose n'a pas marché...";
+                $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Quelque chose n\'a pas marché...
+                                  </div>';
                 return;
             }
 
             $this->UserManagement->UpdateRole($this->UserManagement->GetUserId($this->UserName), $this->Admin);
             $this->UpdateActiveState();
-            $this->Message = "Utilisateur/Profil ajouté(s) correctement";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>Utilisateur/Profil ajouté(s) correctement
+                              </div>';
         }
 
         else
-            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     private function UpdateActiveState()
@@ -187,10 +227,15 @@ class ManageUsers extends CommonController
                 && (!is_null($this->PasswordConfirm) && !empty($this->PasswordConfirm))
                 && $this->PasswordsMatch($this->Password, $this->PasswordConfirm))
                 $this->UserManagement->UpdatePassword($ID, $this->Password);
-            
+
             else if ((self::IsFieldPresent("password") || self::IsFieldPresent("password_confirm")) && (is_null($this->Password) || is_null($this->PasswordConfirm)))
             {
-                $this->Message = "Il faut confirmer le mot de passe";
+                $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Il faut confirmer le mot de passe
+                                  </div>';
                 return;
             }
 
@@ -198,25 +243,45 @@ class ManageUsers extends CommonController
                     && (!is_null($this->PasswordConfirm) && !empty($this->PasswordConfirm))
                     && !$this->PasswordsMatch($this->Password, $this->PasswordConfirm))
             {
-                $this->Message = "Les deux mots de passe ne correspondent pas";
+                $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Les deux mots de passe ne correspondent pas
+                                  </div>';
                 return;
             }
-            
+
             $this->UserManagement->UpdateUsername($ID, $this->UserName);
             $this->UserManagement->UpdateRole($ID, $this->Admin);
             $this->UpdateActiveState();
 
-            $this->Message = "Le compte a correctement été mise à jour";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>Le compte a correctement été mis à jour
+                              </div>';
         }
 
         else
-            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     public function DeactivateUser(int $ID)
     {
         $this->UserManagement->DeactivateAccount($ID);
-        $this->Message = "Le compte a bien été désactivé";
+        $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                <i class="zmdi zmdi-close"></i>
+                            </button>
+                            <strong><i class="zmdi zmdi-check"></i></strong>Le compte a bien été désactivé
+                          </div>';
     }
 
     public function RequireView(string $CRUD, string $Message = null, $UserID = null)
@@ -247,14 +312,26 @@ class ManageUsers extends CommonController
                 break;
 
             case "Edit":
-                if (!isset($User) || is_null($User)) throw new \Exception("Mauvais paramètre : cet utilisateur n'existe pas");
+                if (!isset($User) || is_null($User))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : cet utilisateur n\'existe pas
+                                          </div>');
                 return require_once('views/manage/users/EditUser.view.php');
                 break;
 
             case "Deactivate":
-                if (!isset($User) || is_null($User)) throw new \Exception("Mauvais paramètre : cet utilisateur n'existe pas");
+                if (!isset($User) || is_null($User))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : cet utilisateur n\'existe pas
+                                          </div>');
                 return require_once('views/manage/users/DeactivateUser.view.php');
-                break; 
+                break;
         }
     }
 }

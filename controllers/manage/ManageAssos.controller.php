@@ -20,7 +20,12 @@ class ManageAssos extends CommonController
     public function __construct()
     {
         if (self::IsManager())
-           throw new \Exception("Vous n'avez pas les droits suffisants pour accéder à cette page"); 
+           throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous n\'avez pas les droits suffisants pour accéder à cette page
+                                 </div>');
 
         $this->AssociationsQueries = new \Model\Association();
     }
@@ -56,11 +61,21 @@ class ManageAssos extends CommonController
                                                        $this->FacebookLink,
                                                        $this->TwitterLink,
                                                        $this->ProfileID);
-            $this->Message = "Association ajoutée correctement";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>L\'association a correctement été ajoutée
+                              </div>';
         }
 
         else
-            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     private function IsAssoDataCorrectlyRetrieved()
@@ -84,21 +99,36 @@ class ManageAssos extends CommonController
                                                           $this->ProfileID,
                                                           $this->Email,
                                                           $this->Phone,
-                                                          $this->FacebookLink, 
+                                                          $this->FacebookLink,
                                                           $this->TwitterLink);
-            $this->Message = "L'association a correctement été mise à jour";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>L\'association a correctement été mise à jour
+                              </div>';
         }
 
         else
         {
-            $this->Message = "Remplissez les champs obligatoires";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
         }
     }
 
     public function DeleteAsso(int $ID)
     {
         $this->AssociationsQueries->DeleteAssociation($ID);
-        $this->Message = "L'association a correctement été supprimée";
+        $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                <i class="zmdi zmdi-close"></i>
+                            </button>
+                            <strong><i class="zmdi zmdi-check"></i></strong>L\'association a correctement été supprimée
+                          </div>';
     }
 
     public function RequireView(string $CRUD, string $Message = null, $IdAsso = null)
@@ -124,14 +154,26 @@ class ManageAssos extends CommonController
                 break;
 
             case "Edit":
-                if (!isset($Asso) || is_null($Asso)) throw new \Exception("Mauvais paramètre : cette association n'existe pas");
+                if (!isset($Asso) || is_null($Asso))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : cette association n\'existe pas
+                                          </div>');
                 return require_once('views/manage/assos/EditAsso.view.php');
                 break;
 
             case "Delete":
-                if (!isset($Asso) || is_null($Asso)) throw new \Exception("Mauvais paramètre : cette association n'existe pas");
+                if (!isset($Asso) || is_null($Asso))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : cette association n\'existe pas
+                                          </div>');
                 return require_once('views/manage/assos/DeleteAsso.view.php');
-                break; 
+                break;
         }
     }
 }

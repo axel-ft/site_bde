@@ -51,7 +51,7 @@ $router->post('/deactivate', function()
         else
             $Profile->RequireView();
         $Home = new \Controller\Home();
-        $Home->RequireView($e->getMessage());
+        $Home->RequireView($Profile->getMessage());
     }
 
     catch (Exception $e)

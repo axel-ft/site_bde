@@ -9,36 +9,77 @@
 <body>
     <?php require_once('views/include/NavBar.view.php'); ?>
 
-    <section>
-        <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
-        <a href="/manage/assos/add">Ajouter une association</a>
+    <div class="container-fluid">
+        <?php if ($Message !== null) echo $Message ?>
+        <a class="btn btn-raised btn-success" href="/manage/assos/add">Ajouter une association</a>
         <?php
             if (!is_null($Associations))
             {
-                echo "<table>";
-                echo "<thead><tr><th>Nom de l'association</th><th>Acronyme</th><th>Description</th><th>Logo</th><th>Email</th><th>Téléphone</th><th>Facebook</th><th>Twitter</th><th>Contact principal</th><th>Actions</th></tr></thead>";
+                echo '<table class="table table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th class="align-middle">Nom de l&apos;association</th>
+                                <th class="align-middle">Acronyme</th>
+                                <th class="align-middle d-none d-md-table-cell">Description</th>
+                                <th class="align-middle d-none d-lg-table-cell">Logo</th>
+                                <th class="align-middle d-none d-xl-table-cell">Email</th>
+                                <th class="align-middle d-none d-xl-table-cell">Téléphone</th>
+                                <th class="align-middle d-none d-sm-table-cell">Facebook</th>
+                                <th class="align-middle d-none d-sm-table-cell">Twitter</th>
+                                <th class="align-middle d-none d-sm-table-cell">Contact principal</th>
+                                <th class="align-middle actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
 
                 foreach ($Associations as $Association) {
                 ?>
                     <tr>
-                        <td><?= htmlentities($Association['name_asso']) ?></td>
-                        <td><?php if(!is_null($Association['acronym'])) echo htmlentities($Association['acronym']) ?></td>
-                        <td><?= htmlentities($Association['description_asso']) ?></td>
-                        <td><img src="<?= htmlentities($Association['logo']) ?>" alt="Logo association"</td>
-                        <td><?php if(!is_null($Association['email'])) echo htmlentities($Association['email']) ?></td>
-                        <td><?php if(!is_null($Association['phone'])) echo htmlentities($Association['phone']) ?></td>
-                        <td><?php if(!is_null($Association['facebook_link'])) echo htmlentities($Association['facebook_link']) ?></td>
-                        <td><?php if(!is_null($Association['twitter_link'])) echo htmlentities($Association['twitter_link']) ?></td>
-                        <td><?php foreach ($Profiles as $Profile)
+                        <td class="align-middle"><?= htmlentities($Association['name_asso']) ?></td>
+                        <td class="align-middle"><?php echo (!is_null($Association['acronym'])) ? htmlentities($Association['acronym']) : '-' ?></td>
+                        <td class="align-middle text-left d-none d-md-table-cell"><?= htmlentities($Association['description_asso']) ?></td>
+                        <td class="align-middle d-none d-lg-table-cell">
+                            <a href="#" class="img-thumbnail withripple">
+                                <div class="thumbnail-container text-center">
+                                    <img src="<?= htmlentities($Association['logo']) ?>" class="img-table img-fluid" alt="Logo association">
+                                </div>
+                            <a>
+                        </td>
+                        <td class="align-middle d-none d-xl-table-cell"><?php echo (!is_null($Association['email'])) ? htmlentities($Association['email']) : '-' ?></td>
+                        <td class="align-middle d-none d-xl-table-cell"><?php echo (!is_null($Association['phone'])) ? htmlentities($Association['phone']) : '-' ?></td>
+                        <td class="align-middle d-none d-sm-table-cell">
+                            <?php echo (!is_null($Association['facebook_link'])) ? '<a href="' . htmlentities($Association['facebook_link']) . '" target="_blank" title="Page Facebook" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
+                                            <a href="' . htmlentities($Association['facebook_link']) . '" target="_blank" title="Page Facebook" class="btn-circle btn-circle-sm btn-circle-default d-inline-block d-lg-none"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-'
+                            ?>
+                        </td>
+                        <td class="align-middle d-none d-sm-table-cell">
+                            <?php echo (!is_null($Association['twitter_link'])) ? '<a href="' . htmlentities($Association['twitter_link']) . '" target="_blank" title="Page Twitter" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
+                                            <a href="' . htmlentities($Association['twitter_link']) . '" target="_blank" title="Page Twitter" class="btn-circle btn-circle-sm btn-circle-default d-inline-block d-lg-none"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-'
+                            ?>
+                        </td>
+                        <td class="align-middle d-none d-sm-table-cell"><?php foreach ($Profiles as $Profile)
                                     if (htmlentities($Profile['id_profile']) === htmlentities($Association['id_profile']))
-                                        echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name']) 
+                                        echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name'])
                             ?></td>
-                        <td class="actions"><a class="button" href="/manage/assos/edit/<?= htmlentities($Association['id_asso']) ?>">Modifier</a> <a class="button" href="/manage/assos/delete/<?= htmlentities($Association['id_asso']) ?>">Supprimer</a></td>
+                        <td class="actions align-middle">
+                            <a class="btn btn-raised btn-primary d-none d-lg-inline-block" href="/manage/assos/edit/<?= htmlentities($Association['id_asso']) ?>">
+                                <i class="zmdi zmdi-edit"></i>Modifier
+                            </a>
+                            <a class="btn-circle btn-circle-sm btn-circle-raised btn-circle-primary d-inline-block d-lg-none" href="/manage/assos/edit/<?= htmlentities($Association['id_asso']) ?>">
+                                <i class="zmdi zmdi-edit no-m"></i>
+                            </a>
+                            <a class="btn btn-raised btn-danger d-none d-lg-inline-block" href="/manage/assos/delete/<?= htmlentities($Association['id_asso']) ?>">
+                                <i class="zmdi zmdi-delete"></i>Supprimer
+                            </a>
+                            <a class="btn-circle btn-circle-sm btn-circle-raised btn-circle-danger d-inline-block d-lg-none" href="/manage/assos/delete/<?= htmlentities($Association['id_asso']) ?>">
+                                <i class="zmdi zmdi-delete no-m"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php
                 }
 
-                echo "</table>";
+                echo "</tbody></table>";
             }
 
             else
@@ -46,7 +87,7 @@
                 echo "Aucune association pour le moment";
             }
         ?>
-    </section>
+    </div>
 
     <?php require_once('views/include/Scripts.view.php'); ?>
 </body>

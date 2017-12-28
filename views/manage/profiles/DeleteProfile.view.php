@@ -9,17 +9,33 @@
 <body>
     <?php require_once('views/include/NavBar.view.php'); ?>
 
-    <section>
-        <form method="POST" action="/manage/profiles/delete/<?php if (!is_null($ProfileID) && !empty($ProfileID)) echo htmlentities($ProfileID) ?>">
-            <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
-            <div>
-                Voulez-vous vraiment supprimer ce profil ?
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-12">
+                <div class="card card-hero card-primary animated fadeInUp animation-delay-7">
+                    <div class="card-block">
+                    <h1 class="color-primary text-center">Supprimer le profil de <?php if (!is_null($Profile) && !empty($Profile)) echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name']) ?></h1>
+                        <?php if ($Message !== null) echo $Message ?>
+                        <form method="POST" action="/manage/profiles/delete/<?php if (!is_null($ProfileID) && !empty($ProfileID)) echo htmlentities($ProfileID) ?>">
+                            <div class="row">
+                                <div class="col-lg-12 h2 text-center">
+                                    Voulez-vous vraiment supprimer ce profil ?
+                                </div>
+                            </div>
+                            <div class="row justify-content-md-center">
+                                <div class="col-lg-6 text-center">
+                                    <button type="submit" class="btn btn-raised btn-danger">Supprimer le profil de <?php if (!is_null($Profile) && !empty($Profile)) echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name']) ?></button>
+                                </div>
+                                <div class="col-lg-6 text-center">
+                                    <a href="/manage/profiles" class="btn btn-default" role="button">Revenir à la liste des profils</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-
-            <button type="submit">Supprimer le profil de <?php if (!is_null($Profile) && !empty($Profile)) echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name']) ?></button>
-            <a href="/manage/assos">Revenir à la liste des profils</a>
-        </form>
-    </section>
+        </div>
+    </div>
 
     <?php require_once('views/include/Scripts.view.php'); ?>
 </body>

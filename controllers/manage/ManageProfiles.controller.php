@@ -21,7 +21,12 @@ class ManageProfiles extends CommonController
     public function __construct()
     {
         if (self::IsManager())
-           throw new \Exception("Vous n'avez pas les droits suffisants pour accéder à cette page"); 
+           throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous n\'avez pas les droits suffisants pour accéder à cette page
+                                 </div>');
 
         $this->UserManagement = new \Model\UserManagement();
     }
@@ -33,7 +38,7 @@ class ManageProfiles extends CommonController
             $this->FirstName = self::ValidateStringField("first_name");
             $this->LastName = self::ValidateStringField("last_name");
             $this->Email = self::ValidateStringField("email");
-            $this->Avatar = self::ValidateStringField("avatar");
+            $this->Avatar = self::ValidateUploadedImage("avatar", "avatars");
             $this->ProfileDescription = self::ValidateStringField("description_profile");
             $this->AssoID = self::ValidateIntField("asso");
             $this->Position = self::ValidateStringField("position");
@@ -47,12 +52,6 @@ class ManageProfiles extends CommonController
 
     public function AddProfile()
     {
-        if ($this->IsProfileFormComplete() && $this->UserManagement->IsMailPresent($this->Email))
-            $this->Message = "Il existe déjà un compte avec cette adresse mail";
-
-        else
-            $this->Message = "Il manque un/des champ(s) obligatoire(s)";
-
         if ($this->IsProfileFormComplete() && !$this->UserManagement->IsMailPresent($this->Email))
         {
             $this->UserManagement->NewProfile($this->FirstName,
@@ -65,8 +64,29 @@ class ManageProfiles extends CommonController
                                               $this->FacebookLink,
                                               $this->TwitterLink,
                                               $this->Phone);
-            $this->Message = "Profil ajouté correctement";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>Le profil a correctement été ajouté
+                              </div>';
         }
+
+        else if (!is_null($this->Email) && $this->UserManagement->IsMailPresent($this->Email))
+            $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Il existe déjà un compte avec cette adresse mail
+                              </div>';
+
+        else
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     private function IsProfileDataCorrectlyRetrieved()
@@ -89,14 +109,24 @@ class ManageProfiles extends CommonController
                                                  $this->ProfileDescription,
                                                  $this->AssoID,
                                                  $this->Position,
-                                                 $this->FacebookLink, 
+                                                 $this->FacebookLink,
                                                  $this->TwitterLink,
                                                  $this->Phone);
-            $this->Message = "L'association a correctement été mise à jour";
+            $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-check"></i></strong>L\'association a correctement été mise à jour
+                              </div>';
         }
 
         else
-            $this->Message = "Remplissez les champs obligatoires";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Il manque un/des champ(s) obligatoire(s)
+                              </div>';
     }
 
     public function DeleteProfile(int $ID, bool $DryRun = false)
@@ -107,7 +137,12 @@ class ManageProfiles extends CommonController
             {
                 $this->UserManagement->HideProfile($ID);
                 $this->UserManagement->DeactivateAccountFromProfile($ID);
-                $this->Message = "Le profil a correctement été masqué, et l'utilisateur correspondant désactivé";
+                $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-check"></i></strong>Le profil a correctement été masqué, et l\'utilisateur correspondant désactivé
+                                  </div>';
             }
             return false;
         }
@@ -117,7 +152,12 @@ class ManageProfiles extends CommonController
             if (!$DryRun)
             {
                 $this->UserManagement->DeleteProfile($ID);
-                $this->Message = "Le profil a correctement été supprimé";
+                $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-check"></i></strong>Le profil a correctement été supprimé
+                                  </div>';
             }
             return true;
         }
@@ -146,19 +186,37 @@ class ManageProfiles extends CommonController
                 break;
 
             case "Edit":
-                if (!isset($Profile) || is_null($Profile)) throw new \Exception("Mauvais paramètre : ce profil n'existe pas");
+                if (!isset($Profile) || is_null($Profile))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : ce profil n\'existe pas
+                                          </div>');
                 return require_once('views/manage/profiles/EditProfile.view.php');
                 break;
 
             case "Delete":
-                if (!isset($Profile) || is_null($Profile)) throw new \Exception("Mauvais paramètre : ce profil n'existe pas");
+                if (!isset($Profile) || is_null($Profile))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : ce profil n\'existe pas
+                                          </div>');
                 return require_once('views/manage/profiles/DeleteProfile.view.php');
-                break; 
+                break;
 
             case "Hide":
-                if (!isset($Profile) || is_null($Profile)) throw new \Exception("Mauvais paramètre : ce profil n'existe pas");
+                if (!isset($Profile) || is_null($Profile))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Mauvais paramètre : ce profil n\'existe pas
+                                          </div>');
                 return require_once('views/manage/profiles/HideProfile.view.php');
-                break; 
+                break;
         }
     }
 }

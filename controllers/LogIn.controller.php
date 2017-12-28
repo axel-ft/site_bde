@@ -12,7 +12,12 @@ class LogIn extends CommonController
     public function __construct()
     {
         if(self::Connected())
-            throw new \Exception("Vous êtes déjà connecté");
+            throw new \Exception('<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Vous êtes déjà connecté
+                                  </div>');
 
         $this->UserManagement = new \Model\UserManagement();
 
@@ -41,25 +46,50 @@ class LogIn extends CommonController
                 $_SESSION['id_profile'] = $Account['id_profile'];
                 if (self::IsManager($Account))
                     $_SESSION['manager'] = true;
-                $this->Message = "Vous êtes bien connecté, vous allez être redirigé vers votre profil";
+                $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-check"></i></strong>Vous êtes bien connecté, vous allez être redirigé vers votre profil
+                                  </div>';
                 header('Location: /myprofile');
             }
 
             else if (!is_null($Account) && !self::IsAccountActive($Account))
-                $this->Message = "Votre compte est désactivé. Contactez-nous pour récupérer votre accès.";
+                $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Votre compte est désactivé. Contactez-nous pour récupérer votre accès
+                                  </div>';
 
             else
-                $this->Message = "Identifiant et/ou mot de passe incorrect";
+                $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Identifiant et/ou mot de passe incorrect
+                                  </div>';
         }
 
         else
-            $this->Message = "Identifiant et/ou mot de passe manquant";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Identifiant et/ou mot de passe manquant
+                              </div>';
     }
 
     public static function RequireView(string $Message = null)
     {
         if(self::Connected())
-            throw new \Exception("Vous êtes déjà connecté");
+            throw new \Exception('<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Vous êtes déjà connecté
+                                  </div>');
 
         return require_once('views/LogIn.view.php');
     }

@@ -34,7 +34,7 @@ class Home extends CommonController
 
     public function RequireView(string $Message = null)
     {
-        $Events = self::ConstructDateTimes($this->EventsQueries->GetEvent());
+        $Events = (!is_null($this->EventsQueries->GetEvent())) ? self::ConstructDateTimes($this->EventsQueries->GetEvent()) : null;
 
         return require_once('views/Home.view.php');
     }

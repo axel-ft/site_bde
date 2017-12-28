@@ -18,6 +18,14 @@ class SignUp extends CommonController
 
     public function __construct()
     {
+        if(self::Connected())
+            throw new \Exception('<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Vous êtes déjà connecté. Pour créer un nouveau compte, déconnectez-vous de ce compte.
+                                  </div>');
+
         $this->UserManagement = new \Model\UserManagement();
 
         if (self::AreFieldsPresent("username", "password", "password_confirm", "first_name", "last_name", "email"))
@@ -56,22 +64,50 @@ class SignUp extends CommonController
             {
                 $this->UserManagement->NewProfile($this->FirstName, $this->LastName, $this->Email, $this->Avatar, null, null, $this->FacebookLink);
                 $this->UserManagement->NewUserAccount($this->Username, $this->Password, $this->Email);
-                $this->Message = "Votre compte a correctement été créé";
+                $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-check"></i></strong>Votre compte a correctement été créé
+                                  </div>';
             }
 
             else
-                $this->Message = "Les deux mots de passe ne correspondent pas";
+                $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-close-circle"></i></strong>Les deux mots de passe ne correspondent pas
+                                  </div>';
         }
 
         else if ($this->IsSignUpFormComplete() && $this->UserManagement->IsMailPresent($this->Email))
-            $this->Message = "Il existe déjà un compte avec cette adresse mail";
+            $this->Message = '<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Il existe déjà un compte avec cette adresse mail
+                              </div>';
 
         else
-            $this->Message = "Remplissez les champs obligatoires";
+            $this->Message = '<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <strong><i class="zmdi zmdi-close-circle"></i></strong>Remplissez les champs obligatoires
+                              </div>';
     }
 
     public static function RequireView(string $Message = null)
     {
+        if(self::Connected())
+            throw new \Exception('<div class="alert alert-warning alert-light alert-dismissible text-center" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                        <i class="zmdi zmdi-close"></i>
+                                    </button>
+                                    <strong><i class="zmdi zmdi-alert-triangle"></i></strong>Vous êtes déjà connecté. Pour créer un nouveau compte, déconnectez-vous de ce compte.
+                                  </div>');
+
         return require_once('views/SignUp.view.php');
     }
 }

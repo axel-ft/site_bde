@@ -9,74 +9,145 @@
 <body>
     <?php require_once('views/include/NavBar.view.php'); ?>
 
-    <section>
-        <form method="POST" action="/manage/profiles/add">
-            <?php if ($Message !== null) echo '<div>'.$Message.'</div>'; ?>
-            <div class="field">
-                <label class="icon" for="first_name"><i class="material-icons">person</i></label>
-                <input type="text" name="first_name" id="first_name" placeholder=" " required>
-                <label class="text" for="first_name">Prénom *</label>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-12">
+                <div class="card card-hero card-primary animated fadeInUp animation-delay-7">
+                    <div class="card-block">
+                        <h1 class="color-primary text-center">Ajouter un profil</h1>
+                        <?php if ($Message !== null) echo $Message ?>
+                        <form method="POST" action="/manage/profiles/add" enctype="multipart/form-data">
+                            <fieldset>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-account"></i>
+                                                </span>
+                                                <label class="control-label" for="first_name">Prénom <small>*</small></label>
+                                                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-account"></i>
+                                                </span>
+                                                <label class="control-label" for="last_name">Nom <small>*</small></label>
+                                                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group label-floating">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="zmdi zmdi-upload"></i>
+                                        </span>
+                                        <input type="text" readonly="true" class="form-control" placeholder="Photo de profil - Parcourir...">
+                                        <input type="file" name="avatar" id="avatar" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group label-floating">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="zmdi zmdi-filter-list"></i>
+                                        </span>
+                                        <label class="control-label" for="description_profile">Description</label>
+                                        <textarea name="description_profile" id="description_profile" class="form-control" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-email"></i>
+                                                </span>
+                                                <label class="control-label" for="email">E-mail <small>*</small></label>
+                                                <input type="email" name="email" id="email" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-phone"></i>
+                                                </span>
+                                                <label class="control-label" for="phone">Téléphone</label>
+                                                <input type="tel" name="phone" id="phone" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-conten-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-facebook"></i>
+                                                </span>
+                                                <label class="control-label" for="facebook_link">Lien Facebook</label>
+                                                <input type="url" name="facebook_link" id="facebook_link" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-twitter"></i>
+                                                </span>
+                                                <label class="control-label" for="twitter_link">Lien Twitter</label>
+                                                <input type="url" name="twitter_link" id="twitter_link" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-accounts"></i>
+                                                </span>
+                                                <select name="asso" id="asso" class="form-control selectpicker" data-dropup-auto="false">
+                                                    <option disabled selected value>Association</option>
+                                                    <?php
+                                                        if (!is_null($Associations))
+                                                            foreach($Associations as $Association)
+                                                                echo "<option value=".$Association['id_asso'].">".$Association['name_asso']."</option>";
+                                                        else
+                                                            echo "<option disabled value>Vous devez d'abord ajouter au moins une association</option>"
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group label-floating">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="zmdi zmdi-email"></i>
+                                                </span>
+                                                <label class="control-label" for="position">Poste</label>
+                                                <input type="text" name="position" id="position" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <button class="btn btn-raised btn-primary btn-block" type="submit">Ajouter un profil<i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i></button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-                <label class="icon" for="name"><i class="material-icons">lock</i></label>
-                <input type="text" name="last_name" id="last_name" placeholder=" " required>
-                <label class="text" for="name">Nom *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="email"><i class="material-icons">email</i></label>
-                <input type="mail" name="email" id="email" placeholder=" " required>
-                <label class="text" for="email">E-mail *</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="avatar"><i class="material-icons">contacts</i></label>
-                <input type="text" name="avatar" id="avatar" placeholder=" ">
-                <label class="text" for="avatar">Photo de profil</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="description_profile"><i class="material-icons">lock</i></label>
-                <textarea name="description_profile" id="description_profile" placeholder=" "></textarea>
-                <label class="text" for="description_profile">Description</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="asso"><i class="material-icons">person</i></label>
-                <select name="asso" id="asso">
-                    <option disabled selected value>Association</option>
-                    <?php
-                        if (!is_null($Associations))
-                            foreach($Associations as $Association)
-                                echo "<option value=".$Association['id_asso'].">".$Association['name_asso']."</option>";
-                        else
-                            echo "<option disabled value>Vous devez d'abord ajouter au moins une association</option>"
-                    ?>
-                </select>
-                <label class="text" for="asso">Association</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="position"><i class="material-icons">phone</i></label>
-                <input type="text" name="position" id="position" placeholder=" ">
-                <label class="text" for="position">Poste</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="phone"><i class="material-icons">phone</i></label>
-                <input type="text" name="phone" id="phone" placeholder=" ">
-                <label class="text" for="phone">Téléphone</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="facebook_link"><i class="material-icons">share</i></label>
-                <input type="url" name="facebook_link" id="facebook_link" placeholder=" ">
-                <label class="text" for="facebook_link">Lien Facebook</label>
-            </div>
-            <div class="field">
-                <label class="icon" for="twitter_link"><i class="material-icons">share</i></label>
-                <input type="url" name="twitter_link" id="twitter_link" placeholder=" ">
-                <label class="text" for="twitter_link">Lien Twitter</label>
-            </div>
-
-            <div class="field">
-                <button class="button" type="submit">Ajouter</button>
-            </div>
-        </form>
-    </section>
+        </div>
+    </div>
 
     <?php require_once('views/include/Scripts.view.php'); ?>
 </body>
