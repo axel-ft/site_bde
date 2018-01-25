@@ -22,9 +22,7 @@
                                 <th class="align-middle">Nom</th>
                                 <th class="align-middle">Mail</th>
                                 <th class="align-middle d-none d-lg-table-cell">Avatar</th>
-                                <th class="align-middle d-none d-md-table-cell">Association</th>
-                                <th class="align-middle d-none d-lg-table-cell">Poste</th>
-                                <th class="align-middle d-none d-xl-table-cell">Téléphone</th>
+                                <th class="align-middle d-none d-lg-table-cell">Téléphone</th>
                                 <th class="align-middle d-none d-sm-table-cell">Facebook</th>
                                 <th class="align-middle d-none d-sm-table-cell">Twitter</th>
                                 <th class="align-middle">Actions</th>
@@ -41,30 +39,20 @@
                         <td class="align-middle"><?= htmlentities($Profile['last_name']) ?></td>
                         <td class="align-middle"><?= htmlentities($Profile['email']) ?></td>
                         <td class="align-middle d-none d-lg-table-cell">
-                            <?php echo (!is_null($Profile['avatar'])) ? '<a hre="#" class="img-thumbnail withripple">
+                            <?= (!is_null($Profile['avatar'])) ? '<a hre="#" class="img-thumbnail withripple">
                                                                             <div class="thumbnail-container text-center">
                                                                                 <img src="' . htmlentities($Profile['avatar']) . '" class="img-table img-fluid" alt="Photo de profil">
                                                                             </div>
                                                                          </a>' : '-'?>
                         </td>
-                        <td class="align-middle d-none d-md-table-cell">
-                            <?php if (!is_null($Profile['id_asso']) && !is_null($Associations) && count($Associations) > 0)
-                                  {
-                                      foreach($Associations as $Association)
-                                          if ($Profile['id_asso'] === $Association['id_asso'])
-                                              echo $Association['name_asso'];
-                                  }
-
-                                  else echo '-'
-                            ?>
-                        </td>
-                        <td class="align-middle d-none d-lg-table-cell"><?php echo (!is_null($Profile['position'])) ? htmlentities($Profile['position']) : '-' ?></td>
-                        <td class="align-middle d-none d-xl-table-cell"><?php echo (!is_null($Profile['phone'])) ? htmlentities($Profile['phone']) : '-' ?></td>
-                        <td class="align-middle d-none d-sm-table-cell">
-                            <?php echo (!is_null($Profile['facebook_link'])) ? '<a href="' . htmlentities($Profile['facebook_link']) . '" target="_blank" title="Profil Facebook" class="btn-circle btn-circle-sm btn-circle-default"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-' ?>
+                        <td class="align-middle d-none d-lg-table-cell">
+                            <?= (!is_null($Profile['phone'])) ? htmlentities($Profile['phone']) : '-' ?>
                         </td>
                         <td class="align-middle d-none d-sm-table-cell">
-                            <?php echo (!is_null($Profile['twitter_link'])) ? '<a href="' . htmlentities($Profile['twitter_link']) . '" target="_blank" title="Profil Twitter" class="btn-circle btn-circle-sm btn-circle-default"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-' ?>
+                            <?= (!is_null($Profile['facebook_link'])) ? '<a href="' . htmlentities($Profile['facebook_link']) . '" target="_blank" title="Profil Facebook" class="btn-circle btn-circle-sm btn-circle-default"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-' ?>
+                        </td>
+                        <td class="align-middle d-none d-sm-table-cell">
+                            <?= (!is_null($Profile['twitter_link'])) ? '<a href="' . htmlentities($Profile['twitter_link']) . '" target="_blank" title="Profil Twitter" class="btn-circle btn-circle-sm btn-circle-default"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-' ?>
                         </td>
                         <td class="actions align-middle">
                             <a class="btn btn-raised btn-primary d-none d-lg-inline-block" href="/manage/profiles/edit/<?= htmlentities($Profile['id_profile']) ?>">

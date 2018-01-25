@@ -119,38 +119,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row justify-content-md-center">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <i class="zmdi zmdi-accounts"></i>
-                                                </span>
-                                                <select name="asso" id="asso" class="form-control selectpicker" data-dropup-auto="false">
-                                                    <option disabled selected value>Association</option>
-                                                    <?php
-                                                        if (!is_null($Associations))
-                                                            foreach($Associations as $Association)
-                                                                echo "<option value=" . $Association['id_asso'] . (($Profile['id_asso'] === $Association['id_asso']) ? " selected >" : ">") . $Association['name_asso'] . "</option>";
-                                                        else
-                                                            echo "<option disabled value>Vous devez d'abord ajouter au moins une association</option>"
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group label-floating">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <i class="zmdi zmdi-email"></i>
-                                                </span>
-                                                <label class="control-label" for="position">Poste</label>
-                                                <input type="text" name="position" id="position" class="form-control" value="<?php if(!empty($Profile)) echo htmlentities($Profile['position']) ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </fieldset>
                             <button class="btn btn-raised btn-primary btn-block" type="submit">Mettre à jour ce profil <i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i></button>
                         </form>

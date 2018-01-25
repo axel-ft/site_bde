@@ -16,6 +16,17 @@
         .ms-collapse .card-light .card-header .card-title a {
             color: #424242 !important;
         }
+        .ms-hero.ms-hero-material .ms-hero-material-text-container .ms-hero-material-title h1 {
+            text-transform: initial;
+        }
+        .ms-hero.ms-hero-material .ms-hero-material-text-container .ms-hero-material-list div .ms-list-text {
+            font-size: 1.8rem;
+            line-height: 3rem;
+        }
+        .ms-collapse .card .card-header .card-title.ms-rotate-icon a.collapsed i.r-360 {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
         div.divider {
             position: relative;
         }
@@ -45,6 +56,9 @@
         }
         .img-table {
             max-height: 128px;
+        }
+        .img-small {
+            max-height: 50px;
         }
         .form-group textarea {
             resize: vertical;

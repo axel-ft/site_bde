@@ -13,11 +13,15 @@ use \Router\Router as Router;
 $router = new Router($_GET['url']);
 
 require_once('router/pages/Front.php');
+require_once('router/pages/Search.php');
 require_once('router/pages/MyAccount.php');
 require_once('router/pages/ManageAssos.php');
+require_once('router/pages/ManageStaff.php');
+require_once('router/pages/ManageEvents.php');
+require_once('router/pages/ManageCategories.php');
+require_once('router/pages/ManagePosts.php');
 require_once('router/pages/ManageProfiles.php');
 require_once('router/pages/ManageUsers.php');
-require_once('router/pages/ManageEvents.php');
 
 try
 {

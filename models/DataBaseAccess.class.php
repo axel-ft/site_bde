@@ -18,7 +18,7 @@ class DataBaseAccess
      * The full Data Source Name (DSN), for example mysql:host=localhost;dbname=testdb
      *
      */
-    const SQL_DSN = "mysql:host=localhost;dbname=bdeynovparis";
+    const SQL_DSN = "mysql:host=localhost;dbname=interassos";
 
     /**
      * The user name for the DSN string. This parameter is optional for some PDO drivers.

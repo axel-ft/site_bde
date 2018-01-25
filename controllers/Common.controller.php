@@ -102,6 +102,8 @@ class CommonController
                                         <strong><i class="zmdi zmdi-close-circle"></i></strong>Le fichier est trop grand (max. 10 Mo)
                                       </div>');
 
+            finfo_close($FInfo);
+
             if (move_uploaded_file($_FILES[$PostFileInput]['tmp_name'], './public/images/' . $PathInImagesFolder . "/" . $ImageFileName))
                 return '/public/images/' . $PathInImagesFolder . "/" . $ImageFileName;
             else
@@ -111,6 +113,25 @@ class CommonController
                                         </button>
                                         <strong><i class="zmdi zmdi-close-circle"></i></strong>Il y a eu un problème lors de l\'enregistrement du fichier
                                       </div>');
+        }
+
+        else
+            return null;
+    }
+
+    protected static function ConstructDateTimes(array $Array, array $Keys)
+    {
+        if (!is_null($Array) && !empty($Array))
+        {
+            $i = 0;
+
+            foreach ($Array as $Element)
+            {
+                foreach ($Keys as $Key) $Array[$i][$Key] = new \DateTime($Element[$Key]);
+                $i++;
+            }
+
+            return $Array;
         }
 
         else

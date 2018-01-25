@@ -69,8 +69,7 @@ class Profile extends CommonController {
             $this->Email = self::ValidateStringField("email");
             $this->Avatar = self::ValidateUploadedImage("avatar", "avatars");
             $this->DescriptionProfile = self::ValidateStringField("description_profile");
-            $this->IDAsso = self::ValidateIntField("id_asso");
-            $this->Position = self::ValidateStringField("position");
+            $this->IDAsso = self::ValidateIntField("asso");
             $this->FacebookLink = self::ValidateStringField("facebook_link");
             $this->TwitterLink = self::ValidateStringField("twitter_link");
             $this->Phone = self::ValidateStringField("phone");
@@ -111,9 +110,8 @@ class Profile extends CommonController {
 
     {
         if ($this->UpdateProfileRequest() && $this->IsUpdateProfileFormComplete())
-
         {
-            $this->UserManagement->UpdateProfile(intval($this->ConnectedProfile['id_profile']), $this->FirstName, $this->LastName, $this->Email, $this->Avatar, $this->DescriptionProfile, $this->IDAsso, $this->Position, $this->FacebookLink, $this->TwitterLink, $this->Phone);
+            $this->UserManagement->UpdateProfile(intval($this->ConnectedProfile['id_profile']), $this->FirstName, $this->LastName, $this->Email, $this->Avatar, $this->DescriptionProfile, $this->FacebookLink, $this->TwitterLink, $this->Phone);
             $this->UserManagement->UpdateUsername($this->ConnectedAccount['id_user'], $this->Username);
             $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
@@ -168,7 +166,7 @@ class Profile extends CommonController {
         return false;
     }
 
-    public function RequireView(array $AccountAndProfile = null, string $Message = null)
+    public function RequireView(string $CRUD, array $AccountAndProfile = null, string $Message = null)
     {
         if (is_null($AccountAndProfile))
             $AccountAndProfile = $this->GetAccountAndProfile();
@@ -176,7 +174,43 @@ class Profile extends CommonController {
         if(is_null($Message))
             $Message = $this->Message;
 
-        require_once('views/MyProfile.view.php');
+        switch ($CRUD)
+        {
+            case "View":
+                require_once('models/Association.class.php');
+                require_once('models/Staff.model.php');
+                $AssoQuery = new \Model\Association();
+                $StaffQuery = new \Model\Staff();
+                $Associations = $AssoQuery->GetAssociation();
+                $Staff = $StaffQuery->GetProfileStaff($this->ConnectedProfile['id_profile']);
+                return require_once('views/MyProfile.view.php');
+                break;
+
+            case "Edit":
+                if (!isset($AccountAndProfile) || is_null($AccountAndProfile) || ($AccountAndProfile[1]['id_profile'] !== $_SESSION['id_profile']))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous ne pouvez pas éditer le profil de quelqu\'un d\'autre
+                                          </div>');
+                require_once('models/Association.class.php');
+                $AssoQuery = new \Model\Association();
+                $Associations = $AssoQuery->GetAssociation();
+                return require_once('views/EditMyProfile.view.php');
+                break;
+
+            case "Deactivate":
+                if (!isset($AccountAndProfile) || is_null($AccountAndProfile) || ($AccountAndProfile[0]['id_user'] !== $_SESSION['id_user']))
+                    throw new \Exception('<div class="alert alert-danger alert-light alert-dismissible text-center" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                                                <i class="zmdi zmdi-close"></i>
+                                            </button>
+                                            <strong><i class="zmdi zmdi-close-circle"></i></strong>Vous ne pouvez pas désactiver le compte de quelqu\'un d\'autre
+                                          </div>');
+                return require_once('views/DeactivateMyProfile.view.php');
+                break;
+        }
     }
 }
 

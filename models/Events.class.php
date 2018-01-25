@@ -66,7 +66,8 @@ class Event {
      *
      * @return Array[mixed]
      */
-    public function GetEvent(int $ID = null) {
+    public function GetEvent(int $ID = null)
+    {
         if ($ID !== null) {
             $GetEvent = $this->DB->prepare('SELECT * FROM events WHERE id_event = :id_event');
             $GetEvent->bindParam(':id_event', $ID, \PDO::PARAM_INT);
@@ -76,9 +77,24 @@ class Event {
         } else {
             $GetEvents = $this->DB->prepare('SELECT * FROM events');
             $GetEvents->execute();
-            $Events = $GetEvents->fetchAll();
+            $Events = $GetEvents->fetchAll(\PDO::FETCH_ASSOC);
             return (count($Events) > 0) ? $Events : null;
         }
+    }
+
+    public function GetMonthEvents(int $Year, int $Month, int $IdAsso = null)
+    {
+        $AssoCond = (!is_null($IdAsso)) ? ' AND id_asso = :id_asso' : '';
+        $BeginMonthString = $Year . '-' . $Month . '-01';
+        $EndMonthString = $Year . '-' . ($Month + 1) . '-01';
+        $GetMonthEvents = $this->DB->prepare('SELECT * FROM events WHERE (begin_date >= :begin_month AND begin_date < :end_month) OR (end_date >= :begin_month AND end_date < :end_month)' . $AssoCond);
+        $GetMonthEvents->bindParam(':begin_month', $BeginMonthString, \PDO::PARAM_STR);
+        $GetMonthEvents->bindParam(':end_month', $EndMonthString, \PDO::PARAM_STR);
+        if (!is_null($IdAsso)) $GetMonthEvents->bindParam(':id_asso', $IdAsso, \PDO::PARAM_STR);
+        $GetMonthEvents->execute();
+        $Events = $GetMonthEvents->fetchAll(\PDO::FETCH_ASSOC);
+        return (count($Events) > 0) ? $Events : null;
+
     }
 
     public function DeleteEvent(int $ID)

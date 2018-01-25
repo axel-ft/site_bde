@@ -26,7 +26,7 @@
                                 <th class="align-middle d-none d-xl-table-cell">Téléphone</th>
                                 <th class="align-middle d-none d-sm-table-cell">Facebook</th>
                                 <th class="align-middle d-none d-sm-table-cell">Twitter</th>
-                                <th class="align-middle d-none d-sm-table-cell">Contact principal</th>
+                                <th class="align-middle d-none d-sm-table-cell">Équipe</th>
                                 <th class="align-middle actions">Actions</th>
                             </tr>
                         </thead>
@@ -48,19 +48,20 @@
                         <td class="align-middle d-none d-xl-table-cell"><?php echo (!is_null($Association['email'])) ? htmlentities($Association['email']) : '-' ?></td>
                         <td class="align-middle d-none d-xl-table-cell"><?php echo (!is_null($Association['phone'])) ? htmlentities($Association['phone']) : '-' ?></td>
                         <td class="align-middle d-none d-sm-table-cell">
-                            <?php echo (!is_null($Association['facebook_link'])) ? '<a href="' . htmlentities($Association['facebook_link']) . '" target="_blank" title="Page Facebook" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
+                            <?= (!is_null($Association['facebook_link'])) ? '<a href="' . htmlentities($Association['facebook_link']) . '" target="_blank" title="Page Facebook" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
                                             <a href="' . htmlentities($Association['facebook_link']) . '" target="_blank" title="Page Facebook" class="btn-circle btn-circle-sm btn-circle-default d-inline-block d-lg-none"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-'
                             ?>
                         </td>
                         <td class="align-middle d-none d-sm-table-cell">
-                            <?php echo (!is_null($Association['twitter_link'])) ? '<a href="' . htmlentities($Association['twitter_link']) . '" target="_blank" title="Page Twitter" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
+                            <?= (!is_null($Association['twitter_link'])) ? '<a href="' . htmlentities($Association['twitter_link']) . '" target="_blank" title="Page Twitter" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
                                             <a href="' . htmlentities($Association['twitter_link']) . '" target="_blank" title="Page Twitter" class="btn-circle btn-circle-sm btn-circle-default d-inline-block d-lg-none"><i class="zmdi zmdi-open-in-new no-m"></i></a>' : '-'
                             ?>
                         </td>
-                        <td class="align-middle d-none d-sm-table-cell"><?php foreach ($Profiles as $Profile)
-                                    if (htmlentities($Profile['id_profile']) === htmlentities($Association['id_profile']))
-                                        echo htmlentities($Profile['first_name'])." ".htmlentities($Profile['last_name'])
-                            ?></td>
+                        <td class="align-middle d-none d-sm-table-cell">
+                            <?= '<a href="/manage/staff/' . htmlentities($Association['id_asso']) . '" target="_blank" title="Voir l\'équipe" class="btn btn-default d-none d-lg-inline-block">Voir&nbsp;&nbsp;<i class="zmdi zmdi-open-in-new no-m"></i></a>
+                                 <a href="/manage/staff/' . htmlentities($Association['id_asso']) . '" target="_blank" title="Voir l\'équipe" class="btn-circle btn-circle-sm btn-circle-default d-inline-block d-lg-none"><i class="zmdi zmdi-open-in-new no-m"></i></a>'
+                            ?>
+                        </td>
                         <td class="actions align-middle">
                             <a class="btn btn-raised btn-primary d-none d-lg-inline-block" href="/manage/assos/edit/<?= htmlentities($Association['id_asso']) ?>">
                                 <i class="zmdi zmdi-edit"></i>Modifier

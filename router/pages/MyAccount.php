@@ -6,7 +6,7 @@ $router->get('/myprofile', function()
     try
     {
         $Profile = new \Controller\Profile();
-        $Profile->RequireView();
+        $Profile->RequireView("View");
     }
 
     catch (Exception $e)
@@ -18,7 +18,26 @@ $router->get('/myprofile', function()
     }
 });
 
-$router->post('/myprofile', function()
+
+$router->get('/myprofile/edit', function()
+{
+    require_once "controllers/Profile.controller.php";
+    try
+    {
+        $Profile = new \Controller\Profile();
+        $Profile->RequireView("Edit");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/LogIn.controller.php";
+        http_response_code(403);
+        $LogIn = new \Controller\LogIn();
+        $LogIn->RequireView($e->getMessage());
+    }
+});
+
+$router->post('/myprofile/edit', function()
 {
     require_once "controllers/Profile.controller.php";
     try
@@ -27,7 +46,7 @@ $router->post('/myprofile', function()
         $AccountAndProfile = $Profile->GetAccountAndProfile();
         $Profile->UpdateAccount();
         $AccountAndProfile = $Profile->GetAccountAndProfile();
-        $Profile->RequireView();
+        $Profile->RequireView("View");
     }
 
     catch (Exception $e)
@@ -39,7 +58,25 @@ $router->post('/myprofile', function()
     }
 });
 
-$router->post('/deactivate', function()
+$router->get('/myprofile/deactivate', function()
+{
+    require_once "controllers/Profile.controller.php";
+    try
+    {
+        $Profile = new \Controller\Profile();
+        $Profile->RequireView("Deactivate");
+    }
+
+    catch (Exception $e)
+    {
+        require_once "controllers/Home.controller.php";
+        http_response_code(403);
+        $Home = new \Controller\Home();
+        $Home->RequireView($e->getMessage());
+    }
+});
+
+$router->post('/myprofile/deactivate', function()
 {
     require_once "controllers/Profile.controller.php";
     require_once "controllers/Home.controller.php";
@@ -49,7 +86,7 @@ $router->post('/deactivate', function()
         if($Profile->DeactivateAccount())
             require_once "controllers/Home.controller.php";
         else
-            $Profile->RequireView();
+            $Profile->RequireView("View");
         $Home = new \Controller\Home();
         $Home->RequireView($Profile->getMessage());
     }

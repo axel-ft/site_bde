@@ -21,10 +21,10 @@ class Association {
      * Creates a new association
      *
      */
-    public function NewAssociation(string $AssoName, string $Acronym = null, string $AssoDescription, string $Logo, string $Email = null, string $Phone = null, string $FacebookLink = null, string $TwitterLink = null, int $ProfileID)
+    public function NewAssociation(string $AssoName, string $Acronym = null, string $AssoDescription, string $Logo, string $Email = null, string $Phone = null, string $FacebookLink = null, string $TwitterLink = null)
     {
-        $Association = $this->DB->prepare('INSERT INTO associations(name_asso, acronym, description_asso, logo, email, phone, facebook_link, twitter_link, id_profile)
-                                           VALUES (:name_asso, :acronym, :description_asso, :logo, :email, :phone, :facebook_link, :twitter_link, :id_profile)');
+        $Association = $this->DB->prepare('INSERT INTO associations(name_asso, acronym, description_asso, logo, email, phone, facebook_link, twitter_link)
+                                           VALUES (:name_asso, :acronym, :description_asso, :logo, :email, :phone, :facebook_link, :twitter_link)');
         $Association->bindParam(':name_asso',           $AssoName,        \PDO::PARAM_STR);
         $Association->bindParam(':acronym',             $Acronym,         \PDO::PARAM_STR);
         $Association->bindParam(':description_asso',    $AssoDescription, \PDO::PARAM_STR);
@@ -33,17 +33,22 @@ class Association {
         $Association->bindParam(':phone',               $Phone,           \PDO::PARAM_STR);
         $Association->bindParam(':facebook_link',       $FacebookLink,    \PDO::PARAM_STR);
         $Association->bindParam(':twitter_link',        $TwitterLink,     \PDO::PARAM_STR);
-        $Association->bindParam(':id_profile',          $ProfileID,       \PDO::PARAM_INT);
         $Association->execute();
+
+        $GetInsertedId = $this->DB->prepare('SELECT id_asso FROM associations WHERE name_asso = :name_asso');
+        $GetInsertedId->bindParam(':name_asso', $AssoName, \PDO::PARAM_STR);
+        $GetInsertedId->execute();
+        $InsertedId = $GetInsertedId->fetchAll(\PDO::FETCH_ASSOC);
+        return (count($InsertedId) > 0) ? $InsertedId[0]['id_asso'] : null;
     }
 
     /**
      * Updates a existing association
      *
      */
-    public function UpdateAssociation(int $IdAsso, string $NameAsso, string $Acronym = null, string $DescriptionAsso, string $Logo, int $ProfileID, string $Email = null, string $Phone = null, string $FacebookLink = null, string $TwitterLink = null)
+    public function UpdateAssociation(int $IdAsso, string $NameAsso, string $Acronym = null, string $DescriptionAsso, string $Logo, string $Email = null, string $Phone = null, string $FacebookLink = null, string $TwitterLink = null)
     {
-        $UpdateAsso = $this->DB->prepare('UPDATE associations SET name_asso = :name_asso, acronym = :acronym, description_asso = :description_asso, logo = :logo, email = :email, phone = :phone, facebook_link = :facebook_link, twitter_link = :twitter_link, id_profile = :id_profile WHERE id_asso = :id_asso');
+        $UpdateAsso = $this->DB->prepare('UPDATE associations SET name_asso = :name_asso, acronym = :acronym, description_asso = :description_asso, logo = :logo, email = :email, phone = :phone, facebook_link = :facebook_link, twitter_link = :twitter_link WHERE id_asso = :id_asso');
         $UpdateAsso->bindParam(':id_asso',             $IdAsso,          \PDO::PARAM_INT);
         $UpdateAsso->bindParam(':name_asso',           $NameAsso,        \PDO::PARAM_STR);
         $UpdateAsso->bindParam(':acronym',             $Acronym,         \PDO::PARAM_STR);
@@ -53,7 +58,6 @@ class Association {
         $UpdateAsso->bindParam(':phone',               $Phone,           \PDO::PARAM_STR);
         $UpdateAsso->bindParam(':facebook_link',       $FacebookLink,    \PDO::PARAM_STR);
         $UpdateAsso->bindParam(':twitter_link',        $TwitterLink,     \PDO::PARAM_STR);
-        $UpdateAsso->bindParam(':id_profile',          $ProfileID,       \PDO::PARAM_INT);
         $UpdateAsso->execute();
     }
 

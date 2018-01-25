@@ -2,11 +2,13 @@
 
 require_once "controllers/Common.controller.php";
 require_once "models/Association.class.php";
+require_once "models/Staff.model.php";
 require_once "models/User.class.php";
 
 class ManageAssos extends CommonController
 {
-    private $AssociationsQueries;
+    private $AssociationsQueries,
+            $StaffQueries;
     private $NameAsso,
             $Acronym,
             $AssoDescription,
@@ -14,8 +16,7 @@ class ManageAssos extends CommonController
             $Email,
             $Phone,
             $FacebookLink,
-            $TwitterLink,
-            $ProfileID;
+            $TwitterLink;
 
     public function __construct()
     {
@@ -28,11 +29,12 @@ class ManageAssos extends CommonController
                                  </div>');
 
         $this->AssociationsQueries = new \Model\Association();
+        $this->StaffQueries = new \Model\Staff();
     }
 
     private function IsAssoFormComplete()
     {
-        if ($IsAssoFormComplete = (self::AreFieldsPresent("name_asso", "description_asso", "profile") && self::IsFilePresent("logo")))
+        if ($IsAssoFormComplete = (self::AreFieldsPresent("name_asso", "description_asso") && self::IsFilePresent("logo")))
         {
             $this->NameAsso = self::ValidateStringField("name_asso");
             $this->Acronym = self::ValidateStringField("acronym");
@@ -42,7 +44,6 @@ class ManageAssos extends CommonController
             $this->Phone = self::ValidateStringField("phone");
             $this->FacebookLink = self::ValidateStringField("facebook_link");
             $this->TwitterLink = self::ValidateStringField("twitter_link");
-            $this->ProfileID = self::ValidateIntField("profile");
         }
 
         return $IsAssoFormComplete;
@@ -52,20 +53,19 @@ class ManageAssos extends CommonController
     {
         if ($this->IsAssoFormComplete())
         {
-            $this->AssociationsQueries->NewAssociation($this->NameAsso,
-                                                       $this->Acronym,
-                                                       $this->AssoDescription,
-                                                       $this->Logo,
-                                                       $this->Email,
-                                                       $this->Phone,
-                                                       $this->FacebookLink,
-                                                       $this->TwitterLink,
-                                                       $this->ProfileID);
+            $InsertedId = $this->AssociationsQueries->NewAssociation($this->NameAsso,
+                                                                     $this->Acronym,
+                                                                     $this->AssoDescription,
+                                                                     $this->Logo,
+                                                                     $this->Email,
+                                                                     $this->Phone,
+                                                                     $this->FacebookLink,
+                                                                     $this->TwitterLink);
             $this->Message = '<div class="alert alert-success alert-light alert-dismissible text-center" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
                                     <i class="zmdi zmdi-close"></i>
                                 </button>
-                                <strong><i class="zmdi zmdi-check"></i></strong>L\'association a correctement été ajoutée
+                                <strong><i class="zmdi zmdi-check"></i></strong>L\'association a correctement été ajoutée. <a href="/manage/staff/' . htmlentities($InsertedId) . '" class="btn btn-sm btn-raised btn-success">Ajouter des membres</a>
                               </div>';
         }
 
@@ -82,8 +82,7 @@ class ManageAssos extends CommonController
     {
         return ((!is_null($this->NameAsso) && !empty($this->NameAsso))
                 && (!is_null($this->AssoDescription) && !empty($this->AssoDescription))
-                && (!is_null($this->Logo) && !empty($this->Logo))
-                && (!is_null($this->ProfileID) && !empty($this->ProfileID)));
+                && (!is_null($this->Logo) && !empty($this->Logo)));
     }
 
     public function UpdateAsso(int $ID)
@@ -96,7 +95,6 @@ class ManageAssos extends CommonController
                                                           $this->Acronym,
                                                           $this->AssoDescription,
                                                           $this->Logo,
-                                                          $this->ProfileID,
                                                           $this->Email,
                                                           $this->Phone,
                                                           $this->FacebookLink,

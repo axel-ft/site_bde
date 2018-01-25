@@ -12,6 +12,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 col-md-offset-2">
+                <?php if ($Message !== null) echo $Message ?>
                 <div class="card animated fadeInUp animation-delay-7 color-primary withripple">
                     <div class="card-block-big color-dark">
                         <div class="text-center">
@@ -24,17 +25,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="card animated fadeInUp animation-delay-9 color-primary withripple">
+                <div class="card card-primary animated fadeInUp animation-delay-9 color-primary withripple">
                     <div class="card-block-big color-dark">
                         <h2 class="color-primary">Rechercher</h2>
-                        <p class="lead">Vous pouvez utiliser la recherche pour trouver ce que vous cherchez.</p>
-                        <div class="form-group label-floating">
+                        <p class="lead">Vous pouvez utiliser la recherche pour (re)trouver ce que vous avez égaré</p>
+                        <form action="/search" method="POST" class="form-group label-floating">
                             <label class="control-label" for="search">Rechercher...</label>
-                            <input type="text" name="search" id="search" class="form-control">
-                        </div>
-                        <a href="/search/" class="btn btn-primary btn-raised btn-block">
-                            <i class="zmdi zmdi-search"></i>Rechercher
-                        </a>
+                            <input type="search" name="query" id="search" class="form-control" required>
+                            <button type="submit" class="btn btn-primary btn-raised btn-block">
+                                <i class="zmdi zmdi-search"></i>Rechercher
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

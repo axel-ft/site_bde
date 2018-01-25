@@ -22,17 +22,15 @@ class UserManagement {
      * Creates a new contact (which can correspond to an account)
      *
      */
-    public function NewProfile(string $FirstName, string $LastName, string $Email, string $Avatar = null, string $Descrption = null, int $IdAsso = null, string $Position = null, string $FacebookLink = null, string $TwitterLink = null, string $Phone = null)
+    public function NewProfile(string $FirstName, string $LastName, string $Email, string $Avatar = null, string $Descrption = null, string $FacebookLink = null, string $TwitterLink = null, string $Phone = null)
     {
-        $Profile = $this->DB->prepare('INSERT INTO profiles(first_name, last_name, email, avatar, description_profile, id_asso, position, facebook_link, twitter_link, phone)
-                                 VALUES (:first_name, :last_name, :email, :avatar, :description_profile, :id_asso, :position, :facebook_link, :twitter_link, :phone)');
+        $Profile = $this->DB->prepare('INSERT INTO profiles(first_name, last_name, email, avatar, description_profile, facebook_link, twitter_link, phone)
+                                 VALUES (:first_name, :last_name, :email, :avatar, :description_profile, :facebook_link, :twitter_link, :phone)');
         $Profile->bindParam(':first_name',          $FirstName,       \PDO::PARAM_STR);
         $Profile->bindParam(':last_name',           $LastName,        \PDO::PARAM_STR);
         $Profile->bindParam(':email',               $Email,           \PDO::PARAM_STR);
         $Profile->bindParam(':avatar',              $Avatar,          \PDO::PARAM_STR);
         $Profile->bindParam(':description_profile', $Description,     \PDO::PARAM_STR);
-        $Profile->bindParam(':id_asso',             $IdAsso,          \PDO::PARAM_INT);
-        $Profile->bindParam(':position',            $Position,        \PDO::PARAM_STR);
         $Profile->bindParam(':facebook_link',       $FacebookLink,    \PDO::PARAM_STR);
         $Profile->bindParam(':twitter_link',        $TwitterLink,     \PDO::PARAM_STR);
         $Profile->bindParam(':phone',               $Phone,           \PDO::PARAM_STR);
@@ -49,7 +47,7 @@ class UserManagement {
         $GetProfileId = $this->DB->prepare('SELECT id_profile FROM profiles WHERE email = :email');
         $GetProfileId->bindParam(':email', $Email, \PDO::PARAM_STR);
         $GetProfileId->execute();
-        $IDs = $GetProfileId->fetchAll();
+        $IDs = $GetProfileId->fetchAll(\PDO::FETCH_ASSOC);
         return (count($IDs) > 0) ? $IDs[0]['id_profile'] : null;
     }
 
@@ -89,7 +87,7 @@ class UserManagement {
         $LogIn->bindParam(':username', $Username);
         $LogIn->bindParam(':password', $Password);
         $LogIn->execute();
-        $Accounts = $LogIn->fetchAll();
+        $Accounts = $LogIn->fetchAll(\PDO::FETCH_ASSOC);
         return (count($Accounts) > 0) ? $Accounts[0] : null;
     }
 
@@ -105,7 +103,7 @@ class UserManagement {
         $LogIn->bindParam(':id_user', $ID, \PDO::PARAM_INT);
         $LogIn->bindParam(':password', $Password, \PDO::PARAM_STR);
         $LogIn->execute();
-        $Accounts = $LogIn->fetchAll();
+        $Accounts = $LogIn->fetchAll(\PDO::FETCH_ASSOC);
         return (count($Accounts) > 0) ? true : false;
     }
 
@@ -119,7 +117,7 @@ class UserManagement {
         $UsernameTest = $this->DB->prepare('SELECT * FROM users WHERE username = :username');
         $UsernameTest->bindParam(':username', $Username, \PDO::PARAM_STR);
         $UsernameTest->execute();
-        $Accounts = $UsernameTest->fetchAll();
+        $Accounts = $UsernameTest->fetchAll(\PDO::FETCH_ASSOC);
         return (count($Accounts) > 0);
     }
 
@@ -133,7 +131,7 @@ class UserManagement {
         $MailTest = $this->DB->prepare('SELECT * FROM profiles WHERE email = :email');
         $MailTest->bindParam(':email', $Email, \PDO::PARAM_STR);
         $MailTest->execute();
-        $Profiles = $MailTest->fetchAll();
+        $Profiles = $MailTest->fetchAll(\PDO::FETCH_ASSOC);
         return (count($Profiles) > 0);
     }
 
@@ -149,12 +147,12 @@ class UserManagement {
             $GetUser = $this->DB->prepare('SELECT * FROM users WHERE id_user = :id_user');
             $GetUser->bindParam(':id_user', $ID, \PDO::PARAM_INT);
             $GetUser->execute();
-            $User = $GetUser->fetchAll();
+            $User = $GetUser->fetchAll(\PDO::FETCH_ASSOC);
             return (count($User) > 0) ? $User[0] : null;
         } else {
             $GetUsers = $this->DB->prepare('SELECT * FROM users');
             $GetUsers->execute();
-            $Users = $GetUsers->fetchAll();
+            $Users = $GetUsers->fetchAll(\PDO::FETCH_ASSOC);
             return (count($Users) > 0) ? $Users : null;;
         }
     }
@@ -164,7 +162,7 @@ class UserManagement {
         $GetId = $this->DB->prepare('SELECT id_user FROM users WHERE username = :username');
         $GetId->bindParam(':username', $UserName, \PDO::PARAM_STR);
         $GetId->execute();
-        $Id = $GetId->fetchAll();
+        $Id = $GetId->fetchAll(\PDO::FETCH_ASSOC);
         return (count($Id) > 0) ? intval($Id[0]['id_user']) : null;
     }
 
@@ -182,12 +180,17 @@ class UserManagement {
             $IntID = intval($ID);
             $GetProfile->bindParam(':id_profile', $IntID, \PDO::PARAM_INT);
             $GetProfile->execute();
-            $Profile = $GetProfile->fetchAll();
+            $Profile = $GetProfile->fetchAll(\PDO::FETCH_ASSOC);
             return (count($Profile) > 0) ? $Profile[0] : null;
         } else {
-            $GetProfiles = $this->DB->prepare('SELECT * FROM profiles ORDER BY first_name');
+            $GetProfiles = $this->DB->prepare(
+                'SELECT profiles.id_profile,first_name,last_name,profiles.email,profiles.phone,avatar,description_profile,profiles.facebook_link,profiles.twitter_link,visible,position,staff.id_asso,name_asso 
+                FROM profiles
+                    LEFT JOIN staff ON profiles.id_profile = staff.id_profile
+                    LEFT JOIN associations ON staff.id_asso = associations.id_asso
+                ORDER BY first_name');
             $GetProfiles->execute();
-            $Profiles = $GetProfiles->fetchAll();
+            $Profiles = $GetProfiles->fetchAll(\PDO::FETCH_ASSOC);
             return (count($Profiles) > 0) ? $Profiles : null;
         }
     }
@@ -221,15 +224,13 @@ class UserManagement {
      * Updates all the contact info in the database
      *
      */
-    public function UpdateProfile(int $ID, string $FirstName, string $LastName, string $Email, string $Avatar = null, string $Description = null, int $IDAsso = null, string $Position = null, string $FacebookLink = null, string $TwitterLink = null, string $Phone = null) {
-        $UpdateProfile = $this->DB->prepare('UPDATE profiles SET first_name = :first_name, last_name = :last_name, email = :email, avatar = :avatar, description_profile = :description_profile, id_asso = :id_asso, position = :position, facebook_link = :facebook_link, twitter_link = :twitter_link, phone = :phone WHERE id_profile = :id_profile');
+    public function UpdateProfile(int $ID, string $FirstName, string $LastName, string $Email, string $Avatar = null, string $Description = null, string $FacebookLink = null, string $TwitterLink = null, string $Phone = null) {
+        $UpdateProfile = $this->DB->prepare('UPDATE profiles SET first_name = :first_name, last_name = :last_name, email = :email, avatar = :avatar, description_profile = :description_profile, facebook_link = :facebook_link, twitter_link = :twitter_link, phone = :phone WHERE id_profile = :id_profile');
         $UpdateProfile->bindParam(':first_name',            $FirstName,    \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':last_name',             $LastName,     \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':email',                 $Email,        \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':avatar',                $Avatar,       \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':description_profile',   $Description,  \PDO::PARAM_STR);
-        $UpdateProfile->bindParam(':id_asso',               $IDAsso,       \PDO::PARAM_INT);
-        $UpdateProfile->bindParam(':position',              $Position,     \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':facebook_link',         $FacebookLink, \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':twitter_link',          $TwitterLink,  \PDO::PARAM_STR);
         $UpdateProfile->bindParam(':phone',                 $Phone,        \PDO::PARAM_STR);
@@ -274,7 +275,7 @@ class UserManagement {
         $LinkToAccountTest = $this->DB->prepare('SELECT * FROM users WHERE id_profile = :id_profile');
         $LinkToAccountTest->bindParam(':id_profile', $ProfileID, \PDO::PARAM_INT);
         $LinkToAccountTest->execute();
-        $Accounts = $LinkToAccountTest->fetchAll();
+        $Accounts = $LinkToAccountTest->fetchAll(\PDO::FETCH_ASSOC);
         return (count($Accounts) > 0);
     }
 

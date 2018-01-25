@@ -12,8 +12,6 @@ class ManageProfiles extends CommonController
             $Email,
             $Avatar,
             $ProfileDescription,
-            $AssoID,
-            $Position,
             $FacebookLink,
             $TwitterLink,
             $Phone;
@@ -40,8 +38,6 @@ class ManageProfiles extends CommonController
             $this->Email = self::ValidateStringField("email");
             $this->Avatar = self::ValidateUploadedImage("avatar", "avatars");
             $this->ProfileDescription = self::ValidateStringField("description_profile");
-            $this->AssoID = self::ValidateIntField("asso");
-            $this->Position = self::ValidateStringField("position");
             $this->FacebookLink = self::ValidateStringField("facebook_link");
             $this->TwitterLink = self::ValidateStringField("twitter_link");
             $this->Phone = self::ValidateStringField("phone");
@@ -59,8 +55,6 @@ class ManageProfiles extends CommonController
                                               $this->Email,
                                               $this->Avatar,
                                               $this->ProfileDescription,
-                                              $this->AssoID,
-                                              $this->Position,
                                               $this->FacebookLink,
                                               $this->TwitterLink,
                                               $this->Phone);
@@ -107,8 +101,6 @@ class ManageProfiles extends CommonController
                                                  $this->Email,
                                                  $this->Avatar,
                                                  $this->ProfileDescription,
-                                                 $this->AssoID,
-                                                 $this->Position,
                                                  $this->FacebookLink,
                                                  $this->TwitterLink,
                                                  $this->Phone);

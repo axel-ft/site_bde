@@ -21,10 +21,36 @@ $router->get('/assos', function ()
     $AssosPage->RequireView();
 });
 
+$router->get('/asso/:id', function ($id)
+{
+    require_once 'controllers/Associations.controller.php';
+
+    try
+    {
+        $id = \intval($id);
+        $AssoPage = new \Controller\Associations();
+        $AssoPage->RequireView(null, $id);
+    }
+
+    catch (\Exception $e)
+    {
+        http_response_code(404);
+        $AssosPage = new \Controller\Associations();
+        $AssosPage->RequireView($e->getMessage());
+    }
+});
+
 $router->get('/events', function ()
 {
     require_once "controllers/Events.controller.php";
     $EventsPage = new \Controller\Events();
+    $EventsPage->RequireView();
+});
+
+$router->get('/events/:year/:month', function ($year, $month)
+{
+    require_once "controllers/Events.controller.php";
+    $EventsPage = new \Controller\Events(intval($year), intval($month));
     $EventsPage->RequireView();
 });
 

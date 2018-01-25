@@ -8,6 +8,179 @@
 </div>
 
 <div class="ms-site-container">
+  <?php if (!isset($_SESSION['connected'])) { ?>
+    <div class="modal modal-primary" id="ms-account-modal" tabindex="-1" role="dialog" aria-labelledby="Mon compte">
+        <div class="modal-dialog modal-lg animated zoomIn animated-3x" role="document">
+            <div class="modal-content">
+                <div class="modal-header d-block shadow-2dp no-pb">
+                    <button type="button" class="close d-inline pull-right mt-2" data-dismiss="modal" aria-label="Fermer">
+                        <span aria-hidden="true">
+                            <i class="zmdi zmdi-close"></i>
+                        </span>
+                    </button>
+                    <div class="modal-title text-center">
+                        <span class="ms-logo ms-logo-white ms-logo-sm mr-1">Y</span>
+                        <h3 class="no-m ms-site-title">Inter-
+                            <span>Assos</span>
+                        </h3>
+                    </div>
+                    <div class="modal-header-tabs">
+                        <ul class="nav nav-tabs nav-tabs-full nav-tabs-3 nav-tabs-primary" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a href="#ms-login-tab" aria-controls="ms-login-tab" role="tab" data-toggle="tab" class="nav-link active withoutripple">
+                                    <i class="zmdi zmdi-account"></i> Connexion</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a href="#ms-signup-tab" aria-controls="ms-signup-tab" role="tab" data-toggle="tab" class="nav-link withoutripple">
+                                    <i class="zmdi zmdi-account-add"></i> Inscription</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a href="#ms-recovery-tab" aria-controls="ms-recovery-tab" role="tab" data-toggle="tab" class="nav-link withoutripple">
+                                    <i class="zmdi zmdi-key"></i> Mot de passe oublié</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active show" id="ms-login-tab">
+                            <form method="POST" action="/login">
+                                <fieldset>
+                                    <div class="form-group label-floating">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="zmdi zmdi-account"></i>
+                                            </span>
+                                            <label class="control-label" for="username_login">Nom d'utilisateur <small>*</small></label>
+                                            <input type="text" id="username_login" name="username" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group label-floating">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="zmdi zmdi-lock"></i>
+                                            </span>
+                                            <label class="control-label" for="password_login">Mot de passe <small>*</small></label>
+                                            <input type="password" id="password_login" name="password" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <button type="submit" class="btn btn-raised btn-primary btn-block">Se connecter <i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i></button>
+                            </form>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="ms-signup-tab">
+                            <form method="POST" action="/signup" enctype="multipart/form-data">
+                                <fieldset>
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-account"></i>
+                                                    </span>
+                                                    <label class="control-label" for="username_signup">Nom d'utilisateur <small>*</small></label>
+                                                    <input type="text" id="username_signup" name="username" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-email"></i>
+                                                    </span>
+                                                    <label class="control-label" for="email">E-mail <small>*</small></label>
+                                                    <input type="email" id="email" name="email" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-lock"></i>
+                                                    </span>
+                                                    <label class="control-label" for="password_signup">Mot de passe <small>*</small></label>
+                                                    <input type="password" id="password_signup" name="password" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-lock"></i>
+                                                    </span>
+                                                    <label class="control-label" for="password_confirm_signup">Mot de passe (confirmation) <small>*</small></label>
+                                                    <input type="password" id="password_confirm_signup" name="password_confirm" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-account"></i>
+                                                    </span>
+                                                    <label class="control-label" for="first_name">Prénom <small>*</small></label>
+                                                    <input type="text" id="first_name" name="first_name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-account"></i>
+                                                    </span>
+                                                    <label class="control-label" for="last_name">Nom <small>*</small></label>
+                                                    <input type="text" id="last_name" name="last_name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-upload"></i>
+                                                    </span>
+                                                    <input type="text" readonly="true" class="form-control" placeholder="Photo de profil - Parcourir...">
+                                                    <input type="file" id="avatar" name="avatar" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group label-floating">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="zmdi zmdi-facebook"></i>
+                                                    </span>
+                                                    <label class="control-label" for="facebook_link">Lien Facebook</label>
+                                                    <input type="url" id="facebook_link" name="facebook_link" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <fieldset>
+                                <button type="submit" class="btn btn-raised btn-primary btn-block">Créer un compte <i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i></button>
+                            </form>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="ms-recovery-tab">
+                            <p class="text-center">La récupération automatique du mot de passe n'est pas encore possible. Vous pouvez nous contacter pour récupérer votre accès</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+
     <header class="ms-header ms-header-primary">
         <div class="container container-full">
             <div class="ms-title">
@@ -30,10 +203,10 @@
                         <i class="zmdi zmdi-share"></i>
                     </a>
                 </div>
-                <a href="javascript:void(0)" class="btn-circle btn-circle-primary no-focus animated zoomInDown animation-delay-8">
+                <a class="btn-circle btn-circle-primary no-focus animated zoomInDown animation-delay-8" <?= (isset($_SESSION['connected'])) ? 'href="/myprofile"' : 'href="javascript:void(0)" data-toggle="modal" data-target="#ms-account-modal"' ?>>
                     <i class="zmdi zmdi-account"></i>
                 </a>
-                <form class="search-form animated zoomInDown animation-delay-9">
+                <form action="/search" method="POST" class="search-form animated zoomInDown animation-delay-9">
                     <input id="search-box" type="search" class="search-input" placeholder="Rechercher..." name="query" />
                     <label for="search-box">
                         <i class="zmdi zmdi-search"></i>
@@ -81,18 +254,28 @@
                             <a class="nav-link animated fadeIn animation-delay-9" role="button" data-name="signup" href="/signup">Inscription</a>
                         </li>
                     <?php } else if ($_SESSION['connected']) { ?>
-                    <li class="nav-item <?php if (isset($_SESSION['manager'])) echo "dropdown" ?> <?php if($_SERVER['REQUEST_URI'] === '/myprofile') echo "active" ?>">
-                            <a class="nav-link dropdown-toggle animated fadeIn animation-delay-8" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name"myprofile" href="/myprofile">Mon compte<?php if (isset($_SESSION['manager'])) echo ' <i class="zmdi zmdi-chevron-down"></i>' ?>
-                            </a>
+                        <li class="nav-item <?php if ($_SERVER['REQUEST_URI'] === '/myprofile') echo "active" ?>">
+                            <a class="nav-link animated fadeIn animation-delay-9" role="button" data-name="signup" href="/myprofile">Mon compte</a>
+                        </li>
                             <?php if (isset($_SESSION['manager'])) { ?>
+                        <li class="nav-item dropdown <?php if(strpos($_SERVER['REQUEST_URI'], "manage") !== false) echo "active" ?>">
+                            <a class="nav-link dropdown-toggle animated fadeIn animation-delay-8" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-name"manage" href="javascript:void(0)">Administration<i class="zmdi zmdi-chevron-down ml-1"></i>
+                            </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/manage/assos">Associations</a></li>
+                                <li><a class="dropdown-item" href="/manage/staff">Membres</a></li>
+                                <li class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/manage/events">Événements</a></li>
+                                <li><a class="dropdown-item" href="/manage/photos">Photos</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/manage/categories">Catégories</a></li>
+                                <li><a class="dropdown-item" href="/manage/posts">Articles</a></li>
+                                <li class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/manage/profiles">Profils</a></li>
                                 <li><a class="dropdown-item" href="/manage/users">Utilisateurs</a></li>
                             </ul>
-                            <?php } ?>
                         </li>
+                            <?php } ?>
                         <li class="nav-item <?php if ($_SERVER['REQUEST_URI'] === '/logout') echo "active" ?>">
                             <a class="nav-link animated fadeIn animation-delay-9" role="button" data-name="logout" href="/logout">Déconnexion</a>
                         </li>

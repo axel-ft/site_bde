@@ -113,27 +113,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="zmdi zmdi-account"></i>
                                         </span>
                                         <select name="profile" id="profile" class="form-control selectpicker" data-dropup-auto="false" required>
-                                            <option disabled selected value>Contact Principal *</option>
-                                            <?php
+                                            <option disabled selected value>Membre de l'équipe *</option>
+                                            <?php /*
                                                 if (!is_null($Profiles))
                                                     foreach($Profiles as $Profile)
                                                     {
-                                                        echo "<option value=".$Profile['id_profile'];
-                                                        echo ($Asso['id_profile'] === $Profile['id_profile']) ? " selected >" : ">";
+                                                        echo "<option value=".$Profile['id_profile'] . '>';
                                                         echo $Profile['first_name']." ".$Profile['last_name']."</option>";
                                                     }
                                                 else
                                                     echo "<option disabled value>Vous devez d'abord ajouter au moins un profil</option>"
-                                            ?>
+                                             */ ?>
                                         </select>
                                     </div>
-                                </div>
+                                </div>-->
                             </fieldset>
                             <button class="btn btn-raised btn-primary btn-block" type="submit">Mettre à jour l'association<i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i></button>
                         </form>

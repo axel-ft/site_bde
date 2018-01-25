@@ -1,4 +1,10 @@
+    <footer class="ms-footer">
+        <div class="container">
+            <p>Copyright</p>
+        </div>
+    </footer>
 </div>
+
 <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
     <div class="sb-slidebar-container">
         <header class="ms-slidebar-header">
@@ -20,8 +26,8 @@
                 <?php } ?>
             </div>
             <div class="ms-slidebar-title">
-                <form class="search-form">
-                    <input id="search-box-slidebar" type="text" class="search-input" placeholder="Rechercher..." name="query" />
+                <form class="search-form" action="/search" method="POST">
+                    <input id="search-box-slidebar" type="search" class="search-input" placeholder="Rechercher..." name="query" />
                     <label for="search-box-slidebar">
                         <i class="zmdi zmdi-search"></i>
                     </label>
@@ -56,20 +62,32 @@
                 <a class="link" href="/signup"><i class="zmdi zmdi-account-add"></i>Inscription</a>
             </li>
             <?php } else if ($_SESSION['connected']) { ?>
+                <li>
+                    <a class="link" href="/myprofile"><i class="zmdi zmdi-account"></i> Mon compte</a>
+                </li>
                 <?php if (isset($_SESSION['manager'])) { ?>
-                <li class="card" role="tab" id="myaccount">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#slidebar-menu" href="#myaccount-menu" aria-expanded="false" aria-controls="myaccount-menu">
-                        <i class="zmdi zmdi-account"></i> Mon compte
+                <li class="card" role="tab" id="manage">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#slidebar-menu" href="#manage-menu" aria-expanded="false" aria-controls="manage-menu">
+                        <i class="zmdi zmdi-settings"></i> Administration
                     </a>
-                    <ul id="myaccount-menu" class="card-collapse collapse" role="tabpanel" aria-labelledby="myaccount-menu">
-                        <li>
-                            <a href="/myprofile">Mon profil</a>
-                        </li>
+                    <ul id="manage-menu" class="card-collapse collapse" role="tabpanel" aria-labelledby="manage-menu">
                         <li>
                             <a href="/manage/assos">Associations</a>
                         </li>
                         <li>
+                            <a href="/manage/staff">Membres</a>
+                        </li>
+                        <li>
                             <a href="/manage/events">Événements</a>
+                        </li>
+                        <li>
+                            <a href="/manage/photos">Photos</a>
+                        </li>
+                        <li>
+                            <a href="/manage/categories">Catégories</a>
+                        </li>
+                        <li>
+                            <a href="/manage/posts">Articles</a>
                         </li>
                         <li>
                             <a href="/manage/profiles">Profils</a>
@@ -78,10 +96,6 @@
                             <a href="/manage/users">Utilisateurs</a>
                         </li>
                     </ul>
-                </li>
-                <?php } else { ?>
-                <li>
-                    <a class="link" href="/myprofile"><i class="zmdi zmdi-account"></i> Mon compte</a>
                 </li>
                 <?php } ?>
             <li>
@@ -102,6 +116,7 @@
         </div>
     </div>
 </div>
+
 <!--<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>-->
 <script type="text/javascript" src="/public/js/plugins.min.js"></script>
 <script type="text/javascript" src="/public/js/app.min.js"></script>
